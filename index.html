@@ -148,6 +148,18 @@ dialog::backdrop{background:rgba(42,36,32,.55)}
 .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,120px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:12px;font-weight:600;transition:transform .3s;z-index:99}
 .toast.show{transform:translate(-50%,0)}
 .empty{color:var(--ink3);padding:14px 0}
+/* التقدم والتحضير */
+.prog{display:flex;flex-direction:column;gap:10px}
+.prow{display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;background:#fffaf2;border:1px solid var(--rule);border-radius:12px;padding:10px 14px}
+.prow b{font-size:15px}
+.prow .bar{height:10px;border-radius:99px;background:var(--paper2);overflow:hidden}
+.prow .bar i{display:block;height:100%;border-radius:99px;background:var(--ok)}
+.prow small{display:block;color:var(--ink3);font-size:12.5px;margin-top:4px}
+.prow.cur{border-color:var(--ink2)}
+.minibar{flex:1;height:6px;border-radius:99px;background:var(--rule);overflow:hidden;min-width:40px}
+.minibar i{display:block;height:100%;background:var(--ok);border-radius:99px}
+.prepbox{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#fffaf2;border:1px dashed var(--rule);border-radius:12px;padding:10px 14px;margin-top:10px;font-size:14px;color:var(--ink2)}
+@media (max-width:600px){.prow{grid-template-columns:1fr}}
 
 @media (max-width:820px){
   .wrap{padding:0 16px}
@@ -221,9 +233,9 @@ dialog::backdrop{background:rgba(42,36,32,.55)}
    ===================================================================== */
 const LIBRARY = [
   { id:'design', name:'التصميم الرقمي', unit:'الفصل السادس — تصميم واجهات الموقع الإلكتروني', lessons:[
-    { id:'dd-1', no:'الدرس الأول',  title:'ماهية تصميم واجهة المستخدم UI وتجربة المستخدم UX', path:'', status:'wip' },
-    { id:'dd-2', no:'الدرس الثاني', title:'الخطوات الإجرائية لتصميم واجهات الموقع الإلكتروني', path:'', status:'wip' },
-    { id:'dd-3', no:'الدرس الثالث', title:'رسم المخططات الهيكلية WireFrames', path:'', status:'wip' },
+    { id:'dd-1', no:'الدرس الأول',  title:'ماهية تصميم واجهة المستخدم UI وتجربة المستخدم UX', path:'digital-design/index.html', status:'ready' },
+    { id:'dd-2', no:'الدرس الثاني', title:'الخطوات الإجرائية لتصميم واجهات الموقع الإلكتروني', path:'digital-design/lesson2.html', status:'ready' },
+    { id:'dd-3', no:'الدرس الثالث', title:'رسم المخططات الهيكلية WireFrames', path:'digital-design/lesson3.html', status:'ready' },
     { id:'dd-4', no:'الدرس الرابع', title:'الخطوات الإجرائية للتصميم المرئي', path:'', status:'wip' },
   ]},
   { id:'tech', name:'التقنية الرقمية', unit:'الوحدة الثانية', lessons:[
@@ -279,6 +291,12 @@ function short(n){const w=String(n).replace(/\s+(بنت|بن|ابن)\s+/g,' ').t
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800)}
 function findLesson(id){for(const s of LIBRARY){const l=s.lessons.find(l=>l.id===id);if(l)return{subject:s,lesson:l}}}
 function cfgOf(id){return S.lessonCfg[id]=S.lessonCfg[id]||{classId:S.classes[0].id,drawMode:'names',compMode:'individual'}}
+const PROG_KEY='reema-progress', PREP_KEY='reema-prep';
+function readKey(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return{}}}
+function progFor(lessonId,classId){return (readKey(PROG_KEY)[lessonId]||{})[classId]||null}
+function progPct(p){if(!p||!p.total)return 0;return Math.round(Math.min((p.visited||[]).length,p.total)/p.total*100)}
+function ago(t){if(!t)return'';const d=Math.round((Date.now()-t)/60000);if(d<1)return'الآن';if(d<60)return'قبل '+d+' دقيقة';const h=Math.round(d/60);if(h<24)return'قبل '+h+' ساعة';return new Date(t).toLocaleDateString('ar-SA',{day:'numeric',month:'long'})}
+function prepCount(lessonId){const o=readKey(PREP_KEY)[lessonId]||{};return Object.keys(o).filter(k=>k[0]!=='_').length}
 function download(text,name,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 
 /* ===== التوجيه ===== */
@@ -309,7 +327,7 @@ function renderLibrary(){
       <div class="books">${s.lessons.map(l=>{const c=S.lessonCfg[l.id];return`
         <button class="book" onclick="location.hash='#/lesson/${l.id}'">
           ${coverHTML(s,l)}
-          <div class="meta">${statusPill(l)}${c?`<span>${esc(classById(c.classId).name)}</span>`:''}</div>
+          <div class="meta">${statusPill(l)}${c?`<span>${esc(classById(c.classId).name)}</span>`:''}${(()=>{const p=c&&progFor(l.id,c.classId);return p?`<span class="minibar" title="وصلتِ للشريحة ${p.slide+1} من ${p.total}"><i style="width:${progPct(p)}%"></i></span>`:''})()}</div>
         </button>`}).join('')}</div>
     </div>`).join('');
 }
@@ -361,6 +379,15 @@ function renderLesson(id){
           <div id="gBox"></div>
         </div>
 
+        ${l.path?`<div class="step"><h3><span class="n">${n++}</span>تتبّع الدرس والتحضير</h3>
+          <p class="hint">يُحفظ تلقائيًا أين وصلتِ مع كل فصل، وعند فتح العرض يسألكِ إن كنتِ تريدين الإكمال من آخر شريحة</p>
+          <div class="prog">${S.classes.map(k=>{const p=progFor(l.id,k.id),pc=progPct(p);return `<div class="prow ${k.id===c.id?'cur':''}"><b>${esc(k.name)}</b>
+            <div><div class="bar"><i style="width:${pc}%"></i></div><small>${p?`${p.done?'✅ اكتمل · ':''}آخر شريحة: ${p.slide+1} من ${p.total} «${esc(p.title||'')}» · عُرضت ${(p.visited||[]).length} شريحة · ${ago(p.updated)}`:'لم يبدأ بعد'}</small></div>
+            <div>${p?`<button class="btn soft sm" data-reset="${k.id}">تصفير</button>`:''}</div></div>`}).join('')}</div>
+          <div class="prepbox">📝 <span>${prepCount(l.id)?`تحضير معدّل ومحفوظ لـ <b>${prepCount(l.id)}</b> شريحة`:'التحضير الافتراضي جاهز لكل شريحة — عدّليه من زر 📝 داخل العرض'}</span><span style="flex:1"></span>
+            <a class="btn soft sm" href="${l.path}#print" target="_blank" style="text-decoration:none">🖨️ عرض وطباعة التحضير</a></div>
+        </div>`:''}
+
         <div class="actions">
           <button class="btn" id="startLesson" ${l.status==='ready'&&l.path?'':'disabled'}>ابدئي الدرس ←</button>
           ${cfg.drawMode!=='none'?`<button class="btn line" id="quickDraw">${DRAW_LABEL[cfg.drawMode]} الآن</button>`:''}
@@ -379,13 +406,14 @@ function renderLesson(id){
   $('#gClear')&&($('#gClear').onclick=()=>{if(confirm('حذف كل مجموعات '+c.name+'؟')){S.groups[c.id]=[];save();renderLesson(id)}});
   $('#quickDraw')&&($('#quickDraw').onclick=()=>openDraw(c,cfg.drawMode));
   $('#startLesson').onclick=()=>{publishLesson(l,s,c,cfg);location.href=l.path};
+  $$('[data-reset]').forEach(b=>b.onclick=()=>{if(!confirm('تصفير تتبّع هذا الدرس لـ '+classById(b.dataset.reset).name+'؟'))return;const all=readKey(PROG_KEY);if(all[l.id])delete all[l.id][b.dataset.reset];try{localStorage.setItem(PROG_KEY,JSON.stringify(all))}catch(e){}renderLesson(id)});
 }
 
 /* بيانات الدرس الحالية لصفحة الدرس */
 function publishLesson(l,s,c,cfg){
   const ab=S.absent[c.id]||[];
   try{localStorage.setItem('reema-lesson',JSON.stringify({
-    lessonId:l.id,title:l.title,subject:s.name,teacher:'أ. '+S.settings.teacher,school:S.settings.school,
+    lessonId:l.id,lessonNo:l.no,title:l.title,subject:s.name,classId:c.id,teacher:'أ. '+S.settings.teacher,school:S.settings.school,
     className:c.name,drawMode:cfg.drawMode,compMode:cfg.compMode,
     students:c.students.filter(x=>!ab.includes(x.id)).map(x=>({id:x.id,name:x.name,short:short(x.name)})),
     groups:(S.groups[c.id]||[]).map(g=>({id:g.id,name:g.name,color:g.color,members:g.members.filter(m=>!ab.includes(m)).map(m=>short(nameOf(m)))}))
@@ -488,8 +516,8 @@ $('#openSettings').onclick=()=>{
   [['sTeacher','teacher'],['sSchool','school'],['sYear','year']].forEach(([id,k])=>{const i=$('#'+id);i.value=S.settings[k]||'';i.oninput=()=>{S.settings[k]=i.value;save();route()}});
   $('#setDlg').showModal();
 };
-$('#backup').onclick=()=>download(JSON.stringify(S),`نسخة مكتبة الدروس ${new Date().toISOString().slice(0,10)}.json`,'application/json');
-$('#restore').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.classes)throw 0;S=d;save();route();toast('تم الاستيراد')}catch(_){alert('الملف غير صالح')}};r.readAsText(f);e.target.value=''};
+$('#backup').onclick=()=>download(JSON.stringify(Object.assign({},S,{_prep:readKey(PREP_KEY),_progress:readKey(PROG_KEY)})),`نسخة مكتبة الدروس ${new Date().toISOString().slice(0,10)}.json`,'application/json');
+$('#restore').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.classes)throw 0;try{if(d._prep)localStorage.setItem(PREP_KEY,JSON.stringify(d._prep));if(d._progress)localStorage.setItem(PROG_KEY,JSON.stringify(d._progress))}catch(_){}delete d._prep;delete d._progress;S=d;save();route();toast('تم الاستيراد')}catch(_){alert('الملف غير صالح')}};r.readAsText(f);e.target.value=''};
 $('#factory').onclick=()=>{if(!confirm('حذف كل التعديلات والرجوع لبيانات الإكسل الأصلية؟'))return;const k=S.settings;S=fresh();S.settings=k;save();route();toast('تمت الاستعادة')};
 
 route();
