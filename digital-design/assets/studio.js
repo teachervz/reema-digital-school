@@ -1117,6 +1117,182 @@ R.wfbuild = {
   }
 };
 
+/* ======================================================================
+   🎨 قوالب الدرس الرابع: التصميم المرئي
+   ====================================================================== */
+
+/* عناصر التصميم المرئي — عرض حيّ لكل عنصر */
+const EL_DEMOS = {
+  lines:[
+    { t:'مستقيمة', h:`<svg viewBox="0 0 600 340" class="el-svg"><g stroke="#13A3B8" stroke-width="8" stroke-linecap="round"><line x1="150" y1="40" x2="150" y2="300"/><line x1="300" y1="40" x2="300" y2="300"/><line x1="450" y1="40" x2="450" y2="300"/></g></svg>` },
+    { t:'مائلة', h:`<svg viewBox="0 0 600 340" class="el-svg"><g stroke="#5B5BF7" stroke-width="8" stroke-linecap="round"><line x1="100" y1="300" x2="260" y2="40"/><line x1="250" y1="300" x2="410" y2="40"/><line x1="400" y1="300" x2="560" y2="40"/></g></svg>` },
+    { t:'سماكات مختلفة', h:`<svg viewBox="0 0 600 340" class="el-svg"><g stroke="#17153A" stroke-linecap="round"><line x1="80" y1="70" x2="520" y2="70" stroke-width="3"/><line x1="80" y1="150" x2="520" y2="150" stroke-width="10"/><line x1="80" y1="250" x2="520" y2="250" stroke-width="26"/></g></svg>` },
+    { t:'متقطعة ومتموجة', h:`<svg viewBox="0 0 600 340" class="el-svg"><line x1="150" y1="40" x2="150" y2="300" stroke="#13A3B8" stroke-width="8" stroke-dasharray="20 16"/><path d="M300 40 C 360 90, 240 140, 300 190 S 360 260, 300 300" fill="none" stroke="#FF5FA2" stroke-width="8" stroke-linecap="round"/><line x1="450" y1="40" x2="450" y2="300" stroke="#13A3B8" stroke-width="8" stroke-dasharray="2 14" stroke-linecap="round"/></svg>` },
+    { t:'للفصل بين العناصر', h:`<div class="el-card"><b>قائمة الطعام 🍽️</b><hr><span>🥗 سلطة</span><hr class="d"><span>🍝 مكرونة</span><hr class="d"><span>🍰 حلى</span></div>` }
+  ],
+  shapes:[
+    { t:'أشكال بسيطة', h:`<svg viewBox="0 0 600 340" class="el-svg"><rect x="70" y="100" width="140" height="140" rx="8" fill="#4DC3CF"/><circle cx="300" cy="170" r="75" fill="#A35BB0"/><polygon points="470,90 545,245 395,245" fill="#FFC542"/></svg>` },
+    { t:'شكل معقّد', h:`<svg viewBox="0 0 600 340" class="el-svg"><polygon points="300,30 300,230 170,230" fill="#C9DB4A"/><polygon points="315,60 315,230 420,230" fill="#B3C83A"/><path d="M150 250 H450 L410 300 H190 Z" fill="#C9DB4A"/><line x1="308" y1="30" x2="308" y2="250" stroke="#8A9A20" stroke-width="5"/></svg><small class="el-cap">مركب شراعي من مثلثات وخطوط</small>` },
+    { t:'جمع العناصر وفرزها', h:`<div class="el-groups"><div class="g1"><i>🍎</i><i>🍌</i><i>🍇</i></div><div class="g2"><i>🥕</i><i>🥦</i><i>🌽</i></div></div><small class="el-cap">الأشكال تجمع العناصر من النوع الواحد</small>` }
+  ],
+  space:[
+    { t:'بدون مساحة بيضاء 😵', h:`<div class="el-g crowd"><b class="lg">Google</b><div class="sb"></div><div class="cl">${'<i></i>'.repeat(18)}</div></div>` },
+    { t:'مع المساحة البيضاء 😌', h:`<div class="el-g"><b class="lg">Google</b><div class="sb"></div><div class="bt"><i></i><i></i></div></div><small class="el-cap">شكل (6-20): المساحات الفارغة تُبرز العنصر المهم</small>` },
+    { t:'الإيجابية والسلبية', h:`<div class="el-g marked"><b class="lg pos">Google</b><div class="sb pos"></div><div class="bt pos"><i></i><i></i></div></div><small class="el-cap"><span class="pz">■ مناطق إيجابية (فيها عناصر)</span> · <span class="ng">■ مناطق سلبية (بيضاء)</span></small>` }
+  ],
+  volume:[
+    { t:'ثنائي الأبعاد 2D', h:`<div class="el-3d"><div class="flat"></div></div><small class="el-cap">عرض × ارتفاع فقط</small>` },
+    { t:'ثلاثي الأبعاد 3D', h:`<div class="el-3d"><div class="cube"><i class="f1"></i><i class="f2"></i><i class="f3"></i><i class="f4"></i><i class="f5"></i><i class="f6"></i></div></div><small class="el-cap">الكتلة: التعبير عن البعد الثالث بشكل وهمي</small>` }
+  ],
+  value:[
+    { t:'بدون قيمة', h:`<div class="el-val"><i class="b0"></i></div><small class="el-cap">لون واحد مسطّح</small>` },
+    { t:'مع القيمة (ظل وضوء)', h:`<div class="el-val"><i class="b1"></i><u></u></div><small class="el-cap">المناطق المعتمة والمنارة تعطي واقعية وبُعدًا ثالثًا</small>` },
+    { t:'للتباين', h:`<div class="el-val two"><i class="lt"></i><i class="dk"></i></div><small class="el-cap">القيمة تصنع التباين بين العناصر</small>` }
+  ],
+  color:[
+    { t:'RGB للشاشات', h:`<div class="el-rgb"><i class="r">R</i><i class="g">G</i><i class="b">B</i></div><small class="el-cap">الألوان الضوئية: أحمر، أخضر، أزرق</small>` },
+    { t:'CMYK للطباعة', h:`<div class="el-cmy"><i class="c">C</i><i class="m">M</i><i class="y">Y</i></div><small class="el-cap">ألوان الطباعة: سماوي، أرجواني، أصفر، أسود</small>` },
+    { t:'معاني الألوان', h:`<div class="el-mean"><span style="--c:#12B886">✔ تم الحفظ</span><span style="--c:#FF4D6A">🗑 حذف</span><span style="--c:#3DA5FF">ℹ معلومة</span><span style="--c:#FFC542">⚠ تنبيه</span></div>` },
+    { t:'للتركيز', h:`<div class="el-focus"><i></i><i></i><i class="on">سجّلي الآن</i><i></i></div><small class="el-cap">لون واحد مميز يجذب العين إلى الزر المهم</small>` }
+  ]
+};
+R.elemlab = {
+  html:s=>`<div class="el-wrap"><div class="el-tabs rv">${s.items.map((it,k)=>`<button class="el-tab" data-k="${k}" style="--c:${it.color}"><span>${it.icon}</span><b>${it.t}</b><small>${it.en}</small></button>`).join('')}</div>
+    <div class="el-main rv"><div class="el-vars"></div><div class="el-stage"></div><div class="el-def"></div></div></div>`,
+  init:(sec,s)=>{
+    const st=$('.el-stage',sec), vars=$('.el-vars',sec), def=$('.el-def',sec), tabs=$$('.el-tab',sec);
+    const pick=(k,quiet)=>{
+      const it=s.items[k], D=EL_DEMOS[it.k]; tabs.forEach(t=>t.classList.toggle('on',+t.dataset.k===k)); if(!quiet) tabs[k].classList.add('seen');
+      def.style.setProperty('--c',it.color); def.innerHTML=`<b>${it.t} ${it.en}:</b> ${it.d}`;
+      vars.innerHTML=D.map((v,j)=>`<button class="el-v" data-j="${j}">${v.t}</button>`).join('');
+      const show=j=>{ st.innerHTML=D[j].h; retrigger(st,'pop'); $$('.el-v',vars).forEach(b=>b.classList.toggle('on',+b.dataset.j===j)); };
+      $$('.el-v',vars).forEach(b=>b.onclick=()=>{ show(+b.dataset.j); sound.pop(); }); show(0);
+      if(quiet) return; sound.pop(); if(!$$('.el-tab:not(.seen)',sec).length&&!sec._all){ sec._all=1; setTimeout(()=>sound.ding(),300); }
+    };
+    tabs.forEach(t=>t.onclick=()=>pick(+t.dataset.k)); pick(0,true);
+  }
+};
+
+/* مبادئ التصميم المرئي — بدون المبدأ / مع المبدأ */
+const PR_DEMOS = {
+  unity:{
+    bad:`<div class="pr-unity bad">${[[6,8,'▭'],[52,4,'🛒'],[30,40,'▶'],[70,46,'☰'],[8,62,'▤'],[46,70,'✉'],[80,12,'⬭'],[22,24,'◫']].map(([x,y,i],k)=>`<i style="left:${x}%;top:${y}%;--w:${[22,14,26,12,18,20,10,16][k]}%;--h:${[14,22,12,26,18,12,16,20][k]}%;--r:${[0,30,4,50,8,0,40,12][k]}px">${i}</i>`).join('')}</div>`,
+    good:`<div class="pr-unity good">${['▭','🛒','▶','☰','▤','✉'].map(i=>`<i><b>${i}</b><span></span><span class="s"></span></i>`).join('')}</div>`
+  },
+  hierarchy:{
+    bad:`<div class="pr-hier bad"><p>رؤيتنا</p><p>جيل رقمي مبدع يصنع المستقبل</p><p>نسعى إلى تمكين الطالبات من مهارات التصميم الرقمي والتقنية لبناء وطن طموح.</p><p>اقرئي المزيد</p></div>`,
+    good:`<div class="pr-hier good"><small>رؤيتنا</small><h3>جيل رقمي مبدع<br>يصنع المستقبل</h3><p>نسعى إلى تمكين الطالبات من مهارات التصميم الرقمي والتقنية لبناء وطن طموح.</p><a>اقرئي المزيد ←</a></div>`
+  },
+  balance:{
+    bad:`<div class="pr-bal bad"><div class="pile"><i class="lg"></i><i></i><i></i><i class="im"></i><i></i><i class="bt"></i></div></div>`,
+    good:`<div class="pr-bal good"><div class="top"><i class="lg"></i><span><i></i><i></i><i></i></span></div><div class="mid"><div><i class="h"></i><i></i><i class="s"></i><i class="bt"></i></div><i class="im"></i></div><div class="bot"><i></i><i></i><i></i></div></div>`
+  },
+  contrast:{
+    bad:`<div class="pr-dlg"><div class="ic">🗑️</div><b>حذف العمل؟</b><p>بمجرد حذفه لا يمكنكِ استعادته</p><div class="bts"><span class="g">حذف</span><span class="g">إلغاء</span></div></div>`,
+    good:`<div class="pr-dlg"><div class="ic red">🗑️</div><b>حذف العمل؟</b><p>بمجرد حذفه لا يمكنكِ استعادته</p><div class="bts"><span class="r">حذف</span><span class="g">إلغاء</span></div></div><small class="el-cap">شكل (6-25)</small>`
+  },
+  dominance:{
+    bad:`<div class="pr-dom">${['الأساسية','المتقدمة','الأعمال'].map(n=>`<div class="pl"><b>${n}</b><i></i><i></i><i></i><span>اشتراك</span></div>`).join('')}</div>`,
+    good:`<div class="pr-dom">${['الأساسية','المتقدمة','الأعمال'].map((n,k)=>`<div class="pl ${k===1?'hot':''}">${k===1?'<em>⭐ الأكثر طلبًا</em>':''}<b>${n}</b><i></i><i></i><i></i><span>اشتراك</span></div>`).join('')}</div><small class="el-cap">شكل (6-26): عرض مميز يجذب المستخدم</small>`
+  }
+};
+R.principles = {
+  html:s=>`<div class="pr-tabs rv">${s.items.map((it,k)=>`<button class="pr-tab" data-k="${k}" style="--c:${it.color}"><span>${it.icon}</span><b>${it.t}</b><small>${it.en}</small></button>`).join('')}</div>
+    <div class="pr-main rv"><div class="pr-frame"><div class="pr-switch"><button data-m="bad">❌ بدون المبدأ</button><button data-m="good">✅ مع المبدأ</button></div><div class="pr-stage"></div></div><div class="pr-info"></div></div>`,
+  init:(sec,s)=>{
+    let k=0, m='bad'; const stg=$('.pr-stage',sec), info=$('.pr-info',sec);
+    const draw=()=>{ const it=s.items[k]; stg.innerHTML=PR_DEMOS[it.k][m]; stg.dataset.m=m; retrigger(stg,'pop');
+      $$('.pr-switch button',sec).forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+      info.style.setProperty('--c',it.color); info.innerHTML=`<div class="pi-ic">${it.icon}</div><h3>${it.t}<small>${it.en}</small></h3><p>${it.d}</p>${m==='good'?`<div class="pi-ex">✅ ${it.ex}</div>`:'<div class="pi-q">🤔 ما المشكلة في هذا التصميم؟ ثم اضغطي «مع المبدأ»</div>'}`; };
+    $$('.pr-tab',sec).forEach(b=>b.onclick=()=>{ k=+b.dataset.k; m='bad'; $$('.pr-tab',sec).forEach(x=>x.classList.toggle('on',x===b)); draw(); sound.pop(); });
+    $$('.pr-switch button',sec).forEach(b=>b.onclick=()=>{ m=b.dataset.m; draw(); if(m==='good'){ sound.ding(); $$('.pr-tab',sec)[k].classList.add('seen'); if(!$$('.pr-tab:not(.seen)',sec).length&&!sec._all){ sec._all=1; setTimeout(()=>celebrate(stg,true),300); } } else sound.pop(); });
+    $$('.pr-tab',sec)[0].classList.add('on'); draw();
+  }
+};
+
+/* 📏 الأدلة والأدلة الذكية */
+R.guides = {
+  html:s=>`<div class="gd-wrap">
+    <div class="gd-side rv">
+      ${s.missions?`<div class="gd-miss">${s.missions.map((m,k)=>`<span class="mm" data-k="${k}">${m.t}</span>`).join('')}</div>`:''}
+      <div class="gd-legend"><span><i class="bl"></i><b>أدلة زرقاء:</b> محاذاة الكائنات وتوسيطها</span><span><i class="pk"></i><b>أدلة زهرية:</b> المسافة بالبكسل</span><span><i class="cy"></i><b>أدلة Guides:</b> اسحبيها من المسطرة</span></div>
+      <button class="btn ghost gd-clear">🧹 حذف الأدلة</button>
+    </div>
+    <div class="gd-board rv no-swipe" dir="ltr"><svg class="gd-svg" viewBox="-40 -40 880 580"><rect class="gd-rx" x="-40" y="-40" width="880" height="34"/><rect class="gd-ry" x="-40" y="-40" width="34" height="580"/><text x="-23" y="-17" class="gd-rl">⌗</text><rect class="gd-ab" x="0" y="0" width="800" height="500"/><g class="gd-guides"></g><g class="gd-objs"></g><g class="gd-smart"></g></svg><div class="mx-tip gd-tip">اسحبي الدوائر… أو اسحبي من المسطرة العلوية/اليسرى لإنشاء دليل</div></div></div>`,
+  init:(sec,s)=>{
+    const svg=$('.gd-svg',sec), GG=$('.gd-guides',sec), GO=$('.gd-objs',sec), GS=$('.gd-smart',sec), tip=$('.gd-tip',sec);
+    const W=800, H=500, T=9; let guides=[], drag=null, done=new Set();
+    const objs=(s.objects||[{x:160,y:110},{x:330,y:140},{x:520,y:100},{x:250,y:320},{x:560,y:330}]).map((o,i)=>({ id:i, x:o.x, y:o.y, r:o.r||48, shape:o.shape||'circle', color:o.color||'#A35BB0' }));
+    const mission=key=>{ if(!s.missions) return; s.missions.forEach((m,k)=>{ if(m.k===key&&!done.has(k)){ done.add(k); const el=$(`.mm[data-k="${k}"]`,sec); el.classList.add('ok'); retrigger(el,'pop'); sound.ding(); if(done.size===s.missions.length) setTimeout(()=>celebrate(svg),300); } }); };
+    const pt=e=>{ const r=svg.getBoundingClientRect(), vb=svg.viewBox.baseVal, sc=Math.min(r.width/vb.width,r.height/vb.height), ox=(r.width-vb.width*sc)/2, oy=(r.height-vb.height*sc)/2; return { x:(e.clientX-r.left-ox)/sc+vb.x, y:(e.clientY-r.top-oy)/sc+vb.y }; };
+    const drawObjs=()=>{ GO.innerHTML=''; objs.forEach(o=>{ const el=o.shape==='rect'?svgEl('rect',{ x:o.x-o.r, y:o.y-o.r, width:o.r*2, height:o.r*2, rx:10, fill:o.color }):svgEl('circle',{ cx:o.x, cy:o.y, r:o.r, fill:o.color }); el.dataset.id=o.id; el.classList.add('gd-o'); if(drag&&drag.o===o) el.classList.add('drag'); GO.appendChild(el); }); };
+    const drawGuides=()=>{ GG.innerHTML=''; guides.forEach(g=>GG.appendChild(g.v?svgEl('line',{ x1:g.p, y1:-40, x2:g.p, y2:H+40, class:'gd-g' }):svgEl('line',{ x1:-40, y1:g.p, x2:W+40, y2:g.p, class:'gd-g' }))); };
+    const snap=o=>{
+      GS.innerHTML=''; const others=objs.filter(x=>x!==o); let hit={};
+      const xs=[{v:0},{v:W/2,c:1},{v:W}].concat(others.flatMap(x=>[{v:x.x-x.r,o:1},{v:x.x,o:1},{v:x.x+x.r,o:1}]), guides.filter(g=>g.v).map(g=>({v:g.p,g:1})));
+      const ys=[{v:0},{v:H/2,c:1},{v:H}].concat(others.flatMap(x=>[{v:x.y-x.r,o:1},{v:x.y,o:1},{v:x.y+x.r,o:1}]), guides.filter(g=>!g.v).map(g=>({v:g.p,g:1})));
+      const best=(pos,cands)=>{ let b=null; [[pos,0],[pos-o.r,-o.r],[pos+o.r,o.r]].forEach(([p,off])=>cands.forEach(c=>{ const d=Math.abs(p-c.v); if(d<T&&(!b||d<b.d)) b={ d, to:c.v-off, line:c.v, c }; })); return b; };
+      const bx=best(o.x,xs), by=best(o.y,ys);
+      if(bx){ o.x=bx.to; GS.appendChild(svgEl('line',{ x1:bx.line, y1:-20, x2:bx.line, y2:H+20, class:'gd-blue' })); hit.x=bx.c; }
+      if(by){ o.y=by.to; GS.appendChild(svgEl('line',{ x1:-20, y1:by.line, x2:W+20, y2:by.line, class:'gd-blue' })); hit.y=by.c; }
+      // المسافات الزهرية: أقرب جار أفقيًا وعموديًا أو حافة اللوح
+      const L=o.x-o.r, Rr=o.x+o.r, Tp=o.y-o.r, B=o.y+o.r;
+      let left={ d:L, a:0 }, right={ d:W-Rr, a:W }, top={ d:Tp, a:0 }, bot={ d:H-B, a:H };
+      others.forEach(x=>{ const ov=Math.abs(x.y-o.y)<x.r+o.r, oh=Math.abs(x.x-o.x)<x.r+o.r;
+        if(ov&&x.x+x.r<=L&&L-(x.x+x.r)<left.d) left={ d:L-(x.x+x.r), a:x.x+x.r }; if(ov&&x.x-x.r>=Rr&&(x.x-x.r)-Rr<right.d) right={ d:(x.x-x.r)-Rr, a:x.x-x.r };
+        if(oh&&x.y+x.r<=Tp&&Tp-(x.y+x.r)<top.d) top={ d:Tp-(x.y+x.r), a:x.y+x.r }; if(oh&&x.y-x.r>=B&&(x.y-x.r)-B<bot.d) bot={ d:(x.y-x.r)-B, a:x.y-x.r }; });
+      const hx=left.d<=right.d?[left.a,L,left.d]:[Rr,right.a,right.d], vy=top.d<=bot.d?[top.a,Tp,top.d]:[B,bot.a,bot.d];
+      const lab=(x,y,t)=>{ const g=svgEl('g',{}); g.appendChild(svgEl('rect',{ x:x-26, y:y-14, width:52, height:26, rx:6, class:'gd-pkl' })); const tx=svgEl('text',{ x, y:y+5, class:'gd-pkt' }); tx.textContent=t; g.appendChild(tx); GS.appendChild(g); };
+      if(hx[2]>0){ GS.appendChild(svgEl('line',{ x1:hx[0], y1:o.y, x2:hx[1], y2:o.y, class:'gd-pink' })); lab((hx[0]+hx[1])/2,o.y-20,Math.round(hx[2])); }
+      if(vy[2]>0){ GS.appendChild(svgEl('line',{ x1:o.x, y1:vy[0], x2:o.x, y2:vy[1], class:'gd-pink' })); lab(o.x+34,(vy[0]+vy[1])/2,Math.round(vy[2])); }
+      return hit;
+    };
+    svg.addEventListener('pointerdown',e=>{
+      const p=pt(e), t=e.target.closest('.gd-o');
+      if(t){ const o=objs[+t.dataset.id]; drag={ o, dx:p.x-o.x, dy:p.y-o.y, hit:{} }; }
+      else if(p.y<0&&p.x>-6){ const g={ v:false, p:Math.max(0,p.y) }; guides.push(g); drag={ g }; }
+      else if(p.x<0&&p.y>-6){ const g={ v:true, p:Math.max(0,p.x) }; guides.push(g); drag={ g }; }
+      else { const g=guides.find(g=>g.v?Math.abs(p.x-g.p)<8:Math.abs(p.y-g.p)<8); if(g) drag={ g }; }
+      if(drag){ try{ svg.setPointerCapture(e.pointerId); }catch(_){} drawObjs(); drawGuides(); }
+    });
+    svg.addEventListener('pointermove',e=>{ if(!drag) return; const p=pt(e);
+      if(drag.o){ const o=drag.o; o.x=Math.max(o.r,Math.min(W-o.r,p.x-drag.dx)); o.y=Math.max(o.r,Math.min(H-o.r,p.y-drag.dy)); drag.hit=snap(o); drawObjs(); }
+      else { drag.g.p=drag.g.v?p.x:p.y; drawGuides(); tip.textContent=(drag.g.v?'دليل رأسي ':'دليل أفقي ')+'X/Y = '+Math.round(drag.g.p)+' px'; } });
+    const up=()=>{ if(!drag) return;
+      if(drag.g){ const g=drag.g, lim=g.v?W:H; if(g.p<-4||g.p>lim+4){ guides=guides.filter(x=>x!==g); tip.textContent='🗑 تم حذف الدليل (سحبتِه خارج اللوح)'; } else { mission(g.v?'vguide':'hguide'); tip.textContent='📏 '+(g.v?'دليل رأسي':'دليل أفقي')+' عند '+Math.round(g.p)+' px — الكائنات تنجذب إليه'; sound.pop(); } }
+      else { const h=drag.hit||{}; if((h.x&&h.x.c)||(h.y&&h.y.c)){ mission('center'); tip.textContent='🔵 أحسنتِ! الدليل الأزرق: الكائن في منتصف لوح الرسم'; }
+        if((h.x&&h.x.o)||(h.y&&h.y.o)){ mission('align'); tip.textContent='🔵 الدليل الأزرق: الكائن محاذٍ لكائن آخر'; }
+        if((h.x&&h.x.g)||(h.y&&h.y.g)){ mission('snapguide'); tip.textContent='🧲 الكائن انجذب تلقائيًا إلى الدليل'; }
+        mission('measure'); setTimeout(()=>{ if(!drag) GS.innerHTML=''; },1600); }
+      drag=null; drawObjs(); drawGuides(); };
+    svg.addEventListener('pointerup',up); svg.addEventListener('pointercancel',up);
+    $('.gd-clear',sec).onclick=()=>{ guides=[]; drawGuides(); GS.innerHTML=''; sound.pop(); };
+    drawObjs(); drawGuides();
+  }
+};
+
+/* 🪄 من المخطط الرقمي إلى التصميم المرئي */
+R.visualize = {
+  html:s=>`<div class="vz-wrap">
+    <div class="vz-side rv"><p class="lead">${s.prompt||''}</p>
+      ${s.steps.map(f=>`<button class="fix-t" data-c="${f.c}"><span class="tg"></span><span>${f.icon} ${f.t}</span></button>`).join('')}
+      <div class="meter">🎨 التصميم المرئي <div class="mt-bar vz-bar"><i></i></div><b class="vz-pct">0%</b></div></div>
+    <div class="vz-frame rv"><div class="wb-bar"><span class="dots"><i></i><i></i><i></i></span><span class="wb-url">${s.site||'www.my-school.sa'}</span></div>
+      <div class="vz-page">
+        <div class="vp-nav"><b>🏫 مدرستي الرقمية</b><span>الرئيسية</span><span>الأخبار</span><span>الأندية</span><span>تواصل</span></div>
+        <div class="vp-hero"><div class="vp-txt"><h1>نصمّم المستقبل معًا</h1><p>منصة الطالبات للتعلم الرقمي والإبداع والتصميم.</p><div class="vp-btns"><a class="cta">سجّلي في النادي</a><a>اعرفي المزيد</a></div></div><div class="vp-img"><span>👩‍💻</span></div></div>
+        <h2 class="vp-h2">أنديتنا</h2>
+        <div class="vp-cards">${[['🎨','نادي التصميم'],['🤖','نادي البرمجة'],['📸','نادي التصوير']].map((c,k)=>`<div class="vp-card ${k===1?'feat':''}">${k===1?'<em>⭐ الأكثر تسجيلًا</em>':''}<div class="vp-ci"><span>${c[0]}</span></div><b>${c[1]}</b><p>أنشطة أسبوعية ومشاريع ممتعة.</p></div>`).join('')}</div>
+        <div class="vp-foot">© مدرستي 1448هـ</div>
+      </div></div></div>`,
+  init:(sec,s)=>{
+    const pg=$('.vz-page',sec), bar=$('.vz-bar i',sec), pct=$('.vz-pct',sec);
+    const upd=()=>{ const n=$$('.fix-t.on',sec).length, p=Math.round(n/s.steps.length*100); bar.style.width=p+'%'; pct.textContent=p+'%'; if(n===s.steps.length&&!sec._done){ sec._done=1; celebrate(pg); } };
+    $$('.fix-t',sec).forEach(b=>b.onclick=()=>{ b.classList.toggle('on'); pg.classList.toggle(b.dataset.c,b.classList.contains('on')); b.classList.contains('on')?sound.ding():sound.pop(); upd(); });
+    bar.style.width='0%';
+  }
+};
+
 /* ---------------- 🧱 بناء الشرائح ---------------- */
 const PRINT = location.hash==='#print';
 const ACTIVE = SLIDES.filter(s=>!(s.comp && !COMP));
