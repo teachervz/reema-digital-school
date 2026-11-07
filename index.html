@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتبة الدروس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F1E8; --paper2:#EFE7DA; --ink:#2A2420; --ink2:#5E544C; --ink3:#968A7F; --rule:#DDD2C2;
+  --design:#C8553D; --design-d:#9C3A26; --design-l:#F5DCD3;
+  --tech:#1F5F6B;   --tech-d:#143F48;   --tech-l:#D3E6E8;
+  --gold:#C99A2E; --ok:#3D7A4E; --ok-l:#DCEBDF; --warn:#B7791F; --warn-l:#F7E8CC; --bad:#B23A3A; --bad-l:#F4D9D6;
+  --display:'Tajawal','Segoe UI',Tahoma,sans-serif;
+  --font:'Tajawal','Segoe UI',Tahoma,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font);background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.6}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* ===== الترويسة ===== */
+header{border-bottom:1px solid var(--rule);background:var(--paper)}
+.mast{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:34px 0 18px;flex-wrap:wrap}
+.eyebrow{font-size:13px;letter-spacing:.5px;color:var(--ink3);font-weight:600}
+.mast h1{font-family:var(--display);font-weight:800;font-size:40px;margin:2px 0 0;line-height:1.2}
+.mast .school{color:var(--ink2);font-size:16px}
+.tabs{display:flex;gap:4px;margin-top:6px}
+.tab{border:0;background:none;padding:10px 4px;margin-inline-end:22px;cursor:pointer;font-weight:600;color:var(--ink3);border-bottom:2.5px solid transparent;font-size:16px}
+.tab.on{color:var(--ink);border-color:var(--ink)}
+.iconbtn{border:1px solid var(--rule);background:#fff8;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600;color:var(--ink2)}
+.iconbtn:hover{background:#fff}
+
+main.wrap{padding-top:34px;padding-bottom:80px}
+.view{display:none}.view.on{display:block}
+
+/* ===== الرفوف ===== */
+.shelf{margin-bottom:48px}
+.shelf-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.shelf-head h2{font-family:var(--display);font-size:28px;margin:0;font-weight:800}
+.shelf-head .unit{color:var(--ink2);font-size:15px}
+.shelf-head .count{margin-inline-start:auto;color:var(--ink3);font-size:14px}
+.books{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:26px 22px;padding:22px 0 20px;border-bottom:10px solid var(--paper2);box-shadow:0 12px 0 -6px var(--rule);position:relative}
+.book{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:10px}
+.cover{aspect-ratio:3/4;border-radius:4px 10px 10px 4px;position:relative;overflow:hidden;color:#fff;padding:18px 18px 16px 22px;display:flex;flex-direction:column;
+  box-shadow:inset 7px 0 0 rgba(0,0,0,.18),inset 9px 0 0 rgba(255,255,255,.12),0 10px 22px -10px rgba(42,36,32,.55);transition:transform .2s ease,box-shadow .2s ease}
+.book:hover .cover,.book:focus-visible .cover{transform:translateY(-6px) rotate(-.6deg);box-shadow:inset 7px 0 0 rgba(0,0,0,.18),inset 9px 0 0 rgba(255,255,255,.12),0 20px 30px -12px rgba(42,36,32,.6)}
+.book:focus-visible .cover{outline:3px solid var(--gold);outline-offset:3px}
+.s-design .cover{background:linear-gradient(160deg,var(--design),var(--design-d))}
+.s-tech .cover{background:linear-gradient(160deg,var(--tech),var(--tech-d))}
+.cover .no{font-family:var(--display);font-size:13px;opacity:.85}
+.cover .big{font-family:var(--display);font-weight:800;font-size:64px;line-height:1;opacity:.3;position:absolute;top:12px;left:16px}
+.cover .ttl{font-family:var(--display);font-size:20px;font-weight:700;line-height:1.45;margin-top:auto;position:relative}
+.cover .orn{position:absolute;top:14px;left:14px;width:34px;height:34px;border:1.5px solid rgba(255,255,255,.45);border-radius:50%}
+.cover.project{background:repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 10px,transparent 10px 20px),linear-gradient(160deg,#5B4A3F,#3A2F28)!important}
+.meta{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:99px;font-size:12.5px;font-weight:600}
+.pill.wip{background:var(--warn-l);color:var(--warn)}
+.pill.ready{background:var(--ok-l);color:var(--ok)}
+.pill.wip::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* ===== صفحة الدرس ===== */
+.back{all:unset;cursor:pointer;color:var(--ink2);font-weight:600;font-size:15px;display:inline-flex;gap:6px;margin-bottom:22px}
+.back:hover{color:var(--ink)}
+.lesson{display:grid;grid-template-columns:260px 1fr;gap:44px;align-items:start}
+.lesson .cover{width:100%;position:sticky;top:24px}
+.lesson h2{font-family:var(--display);font-weight:800;font-size:34px;margin:0;line-height:1.3}
+.lesson .sub{color:var(--ink2);margin:4px 0 16px}
+.notice{background:var(--warn-l);color:#7A5212;border-radius:12px;padding:12px 16px;font-size:14.5px;margin-bottom:26px;display:flex;gap:10px;align-items:flex-start}
+.step{border-top:1px solid var(--rule);padding:22px 0}
+.step h3{margin:0 0 4px;font-size:17px;font-weight:700;display:flex;align-items:center;gap:10px}
+.step h3 .n{font-family:var(--display);width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);display:inline-grid;place-items:center;font-size:14px}
+.step .hint{color:var(--ink3);font-size:13.5px;margin:0 0 14px}
+.choices{display:flex;flex-wrap:wrap;gap:10px}
+.choice{border:1.5px solid var(--rule);background:#fffaf2;border-radius:12px;padding:10px 16px;cursor:pointer;font-weight:600;font-size:15px;transition:.15s}
+.choice:hover{border-color:var(--ink3)}
+.choice.on{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.choice small{display:block;font-weight:400;font-size:12.5px;opacity:.75}
+.names{display:flex;flex-wrap:wrap;gap:7px}
+.nm{border:1px solid var(--rule);background:#fffaf2;border-radius:99px;padding:4px 12px;font-size:13.5px;cursor:pointer;user-select:none}
+.nm.off{opacity:.45;text-decoration:line-through;background:transparent}
+.btn{border:0;border-radius:12px;padding:11px 20px;font-weight:700;cursor:pointer;background:var(--ink);color:var(--paper);font-size:15px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.line{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.soft{background:var(--paper2);color:var(--ink)}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:9px}
+.btn.danger{background:var(--bad-l);color:var(--bad)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--rule);padding-top:22px}
+
+/* المجموعات */
+.gtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+input[type=text],input[type=number],select{border:1.5px solid var(--rule);border-radius:10px;padding:7px 11px;background:#fffaf2;outline:none}
+input:focus,select:focus{border-color:var(--ink2)}
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.g{background:#fffaf2;border:1px solid var(--rule);border-radius:12px;padding:10px 12px;border-top:5px solid var(--c)}
+.g.over{outline:2px dashed var(--ink2)}
+.g .gh{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.g .gh input{flex:1;border:0;background:none;font-weight:700;padding:2px;font-size:15px}
+.g .x{border:0;background:none;cursor:pointer;color:var(--ink3);font-size:16px}
+.m{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:13.5px;border-bottom:1px dashed var(--rule);cursor:grab}
+.m:last-child{border:0}
+.m select{margin-inline-start:auto;font-size:12px;padding:1px 4px;border-radius:6px;background:transparent}
+.loose{margin-top:12px;padding:10px;border:1.5px dashed var(--rule);border-radius:12px;min-height:44px}
+.loose.over{border-color:var(--ink2)}
+
+/* ===== الفصول ===== */
+.classbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+.seg{display:inline-flex;border:1.5px solid var(--rule);border-radius:12px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:8px 16px;cursor:pointer;font-weight:600;color:var(--ink2)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.tw{overflow:auto;border:1px solid var(--rule);border-radius:12px;max-height:70vh;background:#fffaf2}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--rule);text-align:center;white-space:nowrap}
+thead th{position:sticky;top:0;background:var(--paper2);z-index:2;font-size:12.5px;line-height:1.4;color:var(--ink2);font-weight:600}
+thead tr:nth-child(2) th{top:33px}
+th.grp{font-weight:700;color:var(--ink)}
+td.who{text-align:right;font-weight:600;position:sticky;right:0;background:#fffaf2;z-index:1;max-width:300px;overflow:hidden;text-overflow:ellipsis}
+th.who{position:sticky;right:0;z-index:3}
+td input.gr{width:46px;text-align:center;padding:4px 2px;border-radius:7px;border:1px solid transparent;background:transparent}
+td input.gr:hover,td input.gr:focus{border-color:var(--rule);background:#fff}
+td input.gr.bad{border-color:var(--bad);background:var(--bad-l)}
+td.sum{font-weight:700;background:#f8f1e4}
+td.tot{font-weight:700;font-size:15px}
+.tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600}
+.t-ex{background:var(--ok-l);color:var(--ok)}.t-vg{background:var(--tech-l);color:var(--tech)}.t-g{background:var(--warn-l);color:var(--warn)}.t-p{background:var(--design-l);color:var(--design-d)}.t-f{background:var(--bad-l);color:var(--bad)}.t-na{color:var(--ink3)}
+
+/* ===== نوافذ ===== */
+dialog{border:0;border-radius:18px;padding:0;max-width:560px;width:calc(100% - 32px);background:var(--paper);color:var(--ink);box-shadow:0 30px 60px -20px rgba(0,0,0,.45)}
+dialog::backdrop{background:rgba(42,36,32,.55)}
+.dlg{padding:26px 28px}
+.dlg h3{font-family:var(--display);margin:0 0 16px;font-size:24px}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;font-weight:600;font-size:14px}
+.field input{font-weight:400}
+.dlg .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px}
+/* القرعة */
+#drawDlg{max-width:760px}
+.drawstage{background:var(--ink);color:var(--paper);border-radius:14px;min-height:240px;display:grid;place-items:center;text-align:center;padding:26px;margin-bottom:16px}
+.drawstage .who{font-family:var(--display);font-size:clamp(30px,6vw,54px);line-height:1.3}
+.drawstage .who.spin{opacity:.55}
+.drawstage .who.win{animation:pop .5s cubic-bezier(.2,1.6,.4,1);color:var(--gold)}
+.drawstage .full{opacity:.75;font-size:15px;margin-top:6px}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,120px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:12px;font-weight:600;transition:transform .3s;z-index:99}
+.toast.show{transform:translate(-50%,0)}
+.empty{color:var(--ink3);padding:14px 0}
+
+@media (max-width:820px){
+  .wrap{padding:0 16px}
+  .mast h1{font-size:30px}
+  .lesson{grid-template-columns:1fr;gap:20px}
+  .lesson .cover{position:static;max-width:200px}
+  .books{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:20px 14px}
+  .cover .ttl{font-size:16px}
+}
+@media print{header,.classbar,.noprint{display:none!important}.tw{max-height:none;overflow:visible}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="mast">
+      <div>
+        <div class="eyebrow">مكتبة الدروس</div>
+        <h1 id="hTeacher"></h1>
+        <div class="school" id="hSchool"></div>
+      </div>
+      <button class="iconbtn" id="openSettings">⚙︎ الإعدادات</button>
+    </div>
+    <nav class="tabs">
+      <button class="tab" data-r="library">الدروس</button>
+      <button class="tab" data-r="classes">الفصول والطالبات</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="view" id="v-library"></section>
+  <section class="view" id="v-lesson"></section>
+  <section class="view" id="v-classes"></section>
+</main>
+
+<!-- الإعدادات -->
+<dialog id="setDlg"><form class="dlg" method="dialog">
+  <h3>الإعدادات</h3>
+  <label class="field">اسم المعلمة<input type="text" id="sTeacher"></label>
+  <label class="field">اسم المدرسة<input type="text" id="sSchool"></label>
+  <label class="field">العام الدراسي<input type="text" id="sYear"></label>
+  <div class="field">النسخ الاحتياطي
+    <div style="display:flex;gap:8px;flex-wrap:wrap;font-weight:400">
+      <button type="button" class="btn soft sm" id="backup">تصدير نسخة</button>
+      <label class="btn soft sm" style="cursor:pointer">استيراد نسخة<input type="file" id="restore" accept=".json" hidden></label>
+      <button type="button" class="btn danger sm" id="factory">استعادة بيانات الإكسل الأصلية</button>
+    </div>
+  </div>
+  <div class="row"><button class="btn">تم</button></div>
+</form></dialog>
+
+<!-- القرعة -->
+<dialog id="drawDlg"><div class="dlg">
+  <h3 id="drawTitle">قرعة</h3>
+  <div class="drawstage"><div><div class="who" id="drawWho">؟</div><div class="full" id="drawFull"></div></div></div>
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <label style="font-size:14px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="noRepeat" checked> بدون تكرار</label>
+    <div style="display:flex;gap:8px">
+      <button class="btn soft" onclick="drawDlg.close()">إغلاق</button>
+      <button class="btn" id="drawGo">اسحبي</button>
+    </div>
+  </div>
+</div></dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   📚 قائمة الدروس — عند تجهيز درس: ضعي مسار ملفه في path وغيّري status إلى 'ready'
+   ===================================================================== */
+const LIBRARY = [
+  { id:'design', name:'التصميم الرقمي', unit:'الفصل السادس — تصميم واجهات الموقع الإلكتروني', lessons:[
+    { id:'dd-1', no:'الدرس الأول',  title:'ماهية تصميم واجهة المستخدم UI وتجربة المستخدم UX', path:'', status:'wip' },
+    { id:'dd-2', no:'الدرس الثاني', title:'الخطوات الإجرائية لتصميم واجهات الموقع الإلكتروني', path:'', status:'wip' },
+    { id:'dd-3', no:'الدرس الثالث', title:'رسم المخططات الهيكلية WireFrames', path:'', status:'wip' },
+    { id:'dd-4', no:'الدرس الرابع', title:'الخطوات الإجرائية للتصميم المرئي', path:'', status:'wip' },
+  ]},
+  { id:'tech', name:'التقنية الرقمية', unit:'الوحدة الثانية', lessons:[
+    { id:'dt-1', no:'الدرس الأول',  title:'دورة حياة النظام', path:'', status:'wip' },
+    { id:'dt-2', no:'الدرس الثاني', title:'إنشاء المخطط', path:'', status:'wip' },
+    { id:'dt-3', no:'الدرس الثالث', title:'الأمن السيبراني', path:'digital-tech/cyber/index.html', status:'wip' },
+    { id:'dt-p', no:'مشروع الوحدة', title:'مشروع الوحدة', path:'', status:'wip', project:true },
+    { id:'dt-r', no:'مراجعة الوحدة', title:'مراجعة الدروس ومحاكي مشروع الوحدة', path:'digital-tech/review/index.html', status:'ready', mark:'↻' },
+  ]},
+];
+
+/* درجات كل مادة كما في دفتر الرصد */
+const GRADEBOOK = {
+  design:[
+    {name:'الجانب المعرفي',max:50,items:[['ملف الإنجاز',10],['الواجبات الإلكترونية',10],['اختبار فتري',10],['اختبار نهائي',20]]},
+    {name:'الجانب المهاري',max:50,items:[['مهارات الاتصال والتشارك',10],['مهارات القيادة والمسؤولية',10],['مهارات إدارة الوقت',10],['المهارات الرقمية',10],['تقديم العرض الختامي',10]]}
+  ],
+  tech:[
+    {name:'المهام الأدائية والمشاركة والتفاعل',max:40,items:[['الحضور',5],['الواجبات الإلكترونية',5],['الاختبار الإلكتروني',5],['تطبيقات عملية',10],['مشاركة صفية',10],['الواجبات الورقية',5]]},
+    {name:'تقويمات تحريرية وتطبيقات عملية',max:60,items:[['اختبار تحريري',30],['تطبيقات عملية',30]]}
+  ]
+};
+
+/* الطالبات والدرجات المستخرجة من ملفات الإكسل */
+const SEED = {"classes":[{"id":"c1","name":"ثالث ثانوي 1","students":[{"id":"c1-01","name":"أرينا بنت بندر بن مفلح بن عبد الرحمن زلفه"},{"id":"c1-02","name":"اسماء بنت حسن بن يحي بن حسن العبدلي الفيفي"},{"id":"c1-03","name":"ألمى بنت سالم بن مشغي بن دليم الخنفري القحطاني"},{"id":"c1-04","name":"آيه بنت حسين بن احمد دريبي"},{"id":"c1-05","name":"بشائر بنت محمد بن حمدان بن خويتم الشيباني العتيبي"},{"id":"c1-06","name":"جنى بنت عبد العزيز بن فضاء بن عاتق المفيلحي السبيعي"},{"id":"c1-07","name":"جنى بنت علي بن موسى بن علي سفياني"},{"id":"c1-08","name":"جنى هاني محمود موسى"},{"id":"c1-09","name":"جوانا بنت ناهس بن سعود المقاطي العتيبي"},{"id":"c1-10","name":"جوري بنت نايف بن مناحي بن سعد بن سفران"},{"id":"c1-11","name":"حصه بنت نايف بن سعد بن عبدالرحمن الجبيري"},{"id":"c1-12","name":"حلا بنت طارق بن يحيى بن حمود طيب"},{"id":"c1-13","name":"داليا بنت مشاري بن صبحي بن جاسم الجبالي"},{"id":"c1-14","name":"رنيم بنت تركي بن عبد الرحمن بن سمير الحافي"},{"id":"c1-15","name":"ريفان بنت عبدالله بن علي بن علي عامري"},{"id":"c1-16","name":"شهد سليم محمد العياشي"},{"id":"c1-17","name":"غلا بنت سالم بن هويدي الرويس العتيبي"},{"id":"c1-18","name":"لانا بنت سلطان بن عيسى بن احمد معيدي"},{"id":"c1-19","name":"لمار يحي جابر المشنوي الفيفي"},{"id":"c1-20","name":"لماربنت عبدالله بن علي ال مزغلل الخثعمي"},{"id":"c1-21","name":"لمى بنت عبد الله بن علي بن محمد بن مسعود السلماني"},{"id":"c1-22","name":"لين بنت محمد بن مبارك بن محمد الودعاني الدوسري"},{"id":"c1-23","name":"ميراف بنت مرعي بن حمود بن محمد عرجان"},{"id":"c1-24","name":"نوره بنت سهلان بن احمد الكثيري"}]},{"id":"c2","name":"ثالث ثانوي 2","students":[{"id":"c2-01","name":"أبرار بنت محمد بن عيدان بن احمد الخزمري الزهراني"},{"id":"c2-02","name":"اجوان بنت منيف بن محمد بن عبدالله بن جراش القحطاني"},{"id":"c2-03","name":"أسيل بنت تركي بن فهد بن محمد الخرجي"},{"id":"c2-04","name":"الجوري بنت خالد بن عبدالعزيز بن جريبيع العلوي الحربي"},{"id":"c2-05","name":"أمينة بنت محمد بن عبدالله المغنم"},{"id":"c2-06","name":"جيان بنت ابراهيم بن حسن بن ابراهيم حفظي"},{"id":"c2-07","name":"حصة بنت سالم بن عبدالله الجروي القحطاني"},{"id":"c2-08","name":"حصه بنت سعد بن مسفر بن خريص المحياني العتيبي"},{"id":"c2-09","name":"خلود بنت علي بن مناع بن احمد المعشي"},{"id":"c2-10","name":"دانه بنت عثمان ابن علي ابن عبدالله الرمثي الشهراني"},{"id":"c2-11","name":"دنيا بنت أحمد بن سليمان حسن"},{"id":"c2-12","name":"راما بنت عبدلله بن راشد العدواني الزهراني"},{"id":"c2-13","name":"ربى بنت سعيد بن مشبب آل عبده الاحمري"},{"id":"c2-14","name":"رغد بنت سعيد بن جمعان بن عبدالله البيضاني الزهراني"},{"id":"c2-15","name":"رفيف بنت احمد بن مساعد بن احمد العياشي الزهراني"},{"id":"c2-16","name":"رفيف بنت عدنان بن عالي بن عواض الربيعي"},{"id":"c2-17","name":"ريم بنت فهيد بن محمد بن مضحي الشيباني"},{"id":"c2-18","name":"ريما بنت موسى بن مبطي الجفيني السلمي"},{"id":"c2-19","name":"ريماس بنت حسن بن احمد فرزعي"},{"id":"c2-20","name":"سديم بنت سعد بن عبدالله ال مريع القرني"},{"id":"c2-21","name":"غلا بنت سلطان بن ثابت بن محمد ال غانم القحطاني"},{"id":"c2-22","name":"غيداء بنت محمد بن صقر السلماني المطيري"},{"id":"c2-23","name":"فلك بنت مناحي بن محمد بن مناحي المسردى"},{"id":"c2-24","name":"لمى بنت محمد بن علي بن احمد معشي"}]},{"id":"c3","name":"ثالث ثانوي 3","students":[{"id":"c3-01","name":"الجازي بنت فواز بن يحي ال يسر اليامي"},{"id":"c3-02","name":"ايناس بنت صالح بن عائض بن منسي الزهيري الغامدي"},{"id":"c3-03","name":"تالين بنت مشعل بن علي بن هزاع الدغيلبي العتيبي"},{"id":"c3-04","name":"جنى بنت سعدون بن سعيد بن عيد العلي العويمري"},{"id":"c3-05","name":"جنى بنت هادي بن محمد بن احمد الجيزاني"},{"id":"c3-06","name":"جود بنت عبدالرزاق بن محمد عبدالرزاق"},{"id":"c3-07","name":"جود بنت عبدالعزيز بن احمد بن علي سهلي"},{"id":"c3-08","name":"دانه بنت خالد بن علي بن عبدالله مسحلي"},{"id":"c3-09","name":"دلال بنت فهيد بن علي الشدادي الحارثي"},{"id":"c3-10","name":"رتاج بنت عوض بن علي بن سرور الحمراني الصريحي"},{"id":"c3-11","name":"رواند بنت سامي بن عايض بن زبران آل سالم الحارثي"},{"id":"c3-12","name":"ريوف عبدالرحمن بن فهد الدوسري"},{"id":"c3-13","name":"ساره بنت محمد بن مبارك القحطاني"},{"id":"c3-14","name":"شيماء بنت احمد بن محمد بن علي موشر حارثي"},{"id":"c3-15","name":"غاليه بنت معلث بن جويد بن بنيان العضيله المطيري"},{"id":"c3-16","name":"غلا بنت احمد بن محمد ال حزمه الشهري"},{"id":"c3-17","name":"فاطمه بنت فيصل بن عثمان العنيزي"},{"id":"c3-18","name":"لمياء بنت سلطان بن سعد بن دخيل العضيله المطيري"},{"id":"c3-19","name":"مها بنت سلطان بن حمدان بن دغيليب الثقفي العتيبي"},{"id":"c3-20","name":"نوره بنت ابراهيم بن يحى بن عيسى مخواني"},{"id":"c3-21","name":"نوره بنت فهد بن خميس بن عبد الرحمن خميس"},{"id":"c3-22","name":"هاجر بنت عبدالرحمن بن محمد بن رشيد الغربي"},{"id":"c3-23","name":"هديل بنت علي بن فهد بن محمد الخنفري القحطاني"},{"id":"c3-24","name":"هند بنت فهد بن حاصل بن حسن ال مشبب الاسمري"}]}],"design":{"c1-01":[10,10,10,20,10,10,10,10,10],"c1-02":[10,10,10,20,10,10,10,10,10],"c1-03":[10,10,10,20,10,10,10,10,10],"c1-04":[10,10,10,20,10,10,10,10,10],"c1-05":[10,10,10,20,10,10,10,10,10],"c1-06":[10,10,10,20,10,10,10,10,10],"c1-07":[10,10,10,20,10,10,10,10,10],"c1-08":[10,10,10,20,10,10,10,10,10],"c1-09":[10,10,10,20,10,10,10,10,10],"c1-10":[10,10,10,20,10,10,10,10,10],"c1-11":[10,10,10,20,10,10,10,10,10],"c1-12":[10,10,10,20,10,10,10,10,10],"c1-13":[10,10,10,20,10,10,10,10,10],"c1-14":[10,10,10,20,10,10,10,10,10],"c1-15":[10,10,10,20,10,10,10,10,10],"c1-16":[10,10,10,20,10,10,10,10,10],"c1-17":[10,10,10,20,10,10,10,10,10],"c1-18":[10,10,10,20,10,10,10,10,10],"c1-19":[10,10,10,20,10,10,10,10,10],"c1-20":[10,10,10,20,10,10,10,10,10],"c1-21":[10,10,10,20,10,10,10,10,10],"c1-22":[10,10,10,20,10,10,10,10,10],"c1-23":[10,10,10,20,10,10,10,10,10],"c1-24":[10,10,10,20,10,10,10,10,10],"c2-01":[10,10,10,20,10,10,10,10,10],"c2-02":[10,10,10,20,10,10,10,10,10],"c2-03":[10,10,10,20,10,10,10,10,10],"c2-04":[10,10,10,20,10,10,10,10,10],"c2-05":[10,10,10,20,10,10,10,10,10],"c2-06":[10,10,10,20,10,10,10,10,10],"c2-07":[10,10,10,20,10,10,10,10,10],"c2-08":[10,10,10,20,10,10,10,10,10],"c2-09":[10,10,10,20,10,10,10,10,10],"c2-10":[10,10,10,20,10,10,10,10,10],"c2-11":[10,10,10,20,10,10,10,10,10],"c2-12":[10,10,10,20,10,10,10,10,10],"c2-13":[10,10,10,20,10,10,10,10,10],"c2-14":[10,10,10,20,10,10,10,10,10],"c2-15":[10,10,10,20,10,10,10,10,10],"c2-16":[10,10,10,20,10,10,10,10,10],"c2-17":[10,10,10,20,10,10,10,10,10],"c2-18":[10,10,10,20,10,10,10,10,10],"c2-19":[10,10,10,20,10,10,10,10,10],"c2-20":[10,10,10,20,10,10,10,10,10],"c2-21":[10,10,10,20,10,10,10,10,10],"c2-22":[10,10,10,20,10,10,10,10,10],"c2-23":[10,10,10,20,10,10,10,10,10],"c2-24":[10,10,10,20,10,10,10,10,10],"c3-01":[10,10,10,20,10,10,10,10,10],"c3-02":[10,10,10,20,10,10,10,10,10],"c3-03":[10,10,10,20,10,10,10,10,10],"c3-04":[10,10,10,20,10,10,10,10,10],"c3-05":[10,10,10,20,10,10,10,10,10],"c3-06":[10,10,10,20,10,10,10,10,10],"c3-07":[10,10,10,20,10,10,10,10,10],"c3-08":[10,10,10,20,10,10,10,10,10],"c3-09":[10,10,10,20,10,10,10,10,10],"c3-10":[10,10,10,20,10,10,10,10,10],"c3-11":[10,10,10,20,10,10,10,10,10],"c3-12":[10,10,10,20,10,10,10,10,10],"c3-13":[10,10,10,20,10,10,10,10,10],"c3-14":[10,10,10,20,10,10,10,10,10],"c3-15":[10,10,10,20,10,10,10,10,10],"c3-16":[10,10,10,20,10,10,10,10,10],"c3-17":[10,10,10,20,10,10,10,10,10],"c3-18":[10,10,10,20,10,10,10,10,10],"c3-19":[10,10,10,20,10,10,10,10,10],"c3-20":[10,10,10,20,10,10,10,10,10],"c3-21":[10,10,10,20,10,10,10,10,10],"c3-22":[10,10,10,20,10,10,10,10,10],"c3-23":[10,10,10,20,10,10,10,10,10],"c3-24":[10,10,10,20,10,10,10,10,10]},"tech":{"c1-01":[5,5,5,10,10,5,30,30],"c1-02":[5,4,5,4,7,4,29,15],"c1-03":[null,null,null,null,null,null,null,null],"c1-04":[null,null,null,null,null,null,null,null],"c1-05":[null,null,null,null,null,null,null,null],"c1-06":[null,null,null,null,null,null,null,null],"c1-07":[null,null,null,null,null,null,null,null],"c1-08":[null,null,null,null,null,null,null,null],"c1-09":[null,null,null,null,null,null,null,null],"c1-10":[null,null,null,null,null,null,null,null],"c1-11":[null,null,null,null,null,null,null,null],"c1-12":[null,null,null,null,null,null,null,null],"c1-13":[null,null,null,null,null,null,null,null],"c1-14":[null,null,null,null,null,null,null,null],"c1-15":[null,null,null,null,null,null,null,null],"c1-16":[null,null,null,null,null,null,null,null],"c1-17":[null,null,null,null,null,null,null,null],"c1-18":[null,null,null,null,null,null,null,null],"c1-19":[null,null,null,null,null,null,null,null],"c1-20":[null,null,null,null,null,null,null,null],"c1-21":[null,null,null,null,null,null,null,null],"c1-22":[null,null,null,null,null,null,null,null],"c1-23":[null,null,null,null,null,null,null,null],"c1-24":[null,null,null,null,null,null,null,null],"c2-01":[5,5,5,10,10,5,30,30],"c2-02":[5,4,5,4,7,4,29,15],"c2-03":[null,null,null,null,null,null,null,null],"c2-04":[null,null,null,null,null,null,null,null],"c2-05":[null,null,null,null,null,null,null,null],"c2-06":[null,null,null,null,null,null,null,null],"c2-07":[null,null,null,null,null,null,null,null],"c2-08":[null,null,null,null,null,null,null,null],"c2-09":[null,null,null,null,null,null,null,null],"c2-10":[null,null,null,null,null,null,null,null],"c2-11":[null,null,null,null,null,null,null,null],"c2-12":[null,null,null,null,null,null,null,null],"c2-13":[null,null,null,null,null,null,null,null],"c2-14":[null,null,null,null,null,null,null,null],"c2-15":[null,null,null,null,null,null,null,null],"c2-16":[null,null,null,null,null,null,null,null],"c2-17":[null,null,null,null,null,null,null,null],"c2-18":[null,null,null,null,null,null,null,null],"c2-19":[null,null,null,null,null,null,null,null],"c2-20":[null,null,null,null,null,null,null,null],"c2-21":[null,null,null,null,null,null,null,null],"c2-22":[null,null,null,null,null,null,null,null],"c2-23":[null,null,null,null,null,null,null,null],"c2-24":[null,null,null,null,null,null,null,null],"c3-01":[5,5,5,10,10,5,30,30],"c3-02":[5,4,5,4,7,4,29,15],"c3-03":[null,null,null,null,null,null,null,null],"c3-04":[null,null,null,null,null,null,null,null],"c3-05":[null,null,null,null,null,null,null,null],"c3-06":[null,null,null,null,null,null,null,null],"c3-07":[null,null,null,null,null,null,null,null],"c3-08":[null,null,null,null,null,null,null,null],"c3-09":[null,null,null,null,null,null,null,null],"c3-10":[null,null,null,null,null,null,null,null],"c3-11":[null,null,null,null,null,null,null,null],"c3-12":[null,null,null,null,null,null,null,null],"c3-13":[null,null,null,null,null,null,null,null],"c3-14":[null,null,null,null,null,null,null,null],"c3-15":[null,null,null,null,null,null,null,null],"c3-16":[null,null,null,null,null,null,null,null],"c3-17":[null,null,null,null,null,null,null,null],"c3-18":[null,null,null,null,null,null,null,null],"c3-19":[null,null,null,null,null,null,null,null],"c3-20":[null,null,null,null,null,null,null,null],"c3-21":[null,null,null,null,null,null,null,null],"c3-22":[null,null,null,null,null,null,null,null],"c3-23":[null,null,null,null,null,null,null,null],"c3-24":[null,null,null,null,null,null,null,null]}};
+
+const GCOLORS=['#C8553D','#1F5F6B','#C99A2E','#3D7A4E','#6B4E9B','#B5577E','#3E6FA8','#7A6A3A','#2F8A82','#8C4A2F'];
+const KEY='reema-library-v1';
+const DRAW_LABEL={names:'قرعة أسماء',groups:'قرعة مجموعات',none:'بدون قرعة'};
+const COMP_LABEL={individual:'تنافسي فردي',groups:'تنافسي مجموعات',none:'غير تنافسي'};
+
+function fresh(){return{
+  settings:{teacher:'ريما الهويشل',school:'التربية الرقمية',year:'1448هـ'},
+  classes:JSON.parse(JSON.stringify(SEED.classes)),
+  grades:{design:JSON.parse(JSON.stringify(SEED.design)),tech:JSON.parse(JSON.stringify(SEED.tech))},
+  lessonCfg:{},  // lessonId -> {classId, drawMode, compMode}
+  groups:{},     // classId -> [{id,name,color,members}]
+  absent:{},     // classId -> [sid]
+  ui:{classId:'c1',subject:'design'}
+}}
+let S; try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.classes)S=fresh();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+/* أدوات */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,9);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const classById=id=>S.classes.find(c=>c.id===id)||S.classes[0];
+const nameOf=id=>{for(const c of S.classes){const s=c.students.find(s=>s.id===id);if(s)return s.name}return''};
+function short(n){const w=String(n).replace(/\s+(بنت|بن|ابن)\s+/g,' ').trim().split(/\s+/);return w.length<=2?w.join(' '):w[0]+' '+w[w.length-1]}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800)}
+function findLesson(id){for(const s of LIBRARY){const l=s.lessons.find(l=>l.id===id);if(l)return{subject:s,lesson:l}}}
+function cfgOf(id){return S.lessonCfg[id]=S.lessonCfg[id]||{classId:S.classes[0].id,drawMode:'names',compMode:'individual'}}
+function download(text,name,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+
+/* ===== التوجيه ===== */
+function route(){
+  const h=location.hash.replace(/^#\/?/,'').split('/');
+  const r=h[0]||'library';
+  $$('.view').forEach(v=>v.classList.remove('on'));
+  $$('.tab').forEach(t=>t.classList.toggle('on',t.dataset.r===(r==='lesson'?'library':r)));
+  $('#hTeacher').textContent='أ. '+S.settings.teacher;
+  $('#hSchool').textContent=S.settings.school+(S.settings.year?' · '+S.settings.year:'');
+  if(r==='lesson'&&findLesson(h[1])){renderLesson(h[1]);$('#v-lesson').classList.add('on')}
+  else if(r==='classes'){renderClasses();$('#v-classes').classList.add('on')}
+  else{renderLibrary();$('#v-library').classList.add('on')}
+}
+$$('.tab').forEach(t=>t.onclick=()=>location.hash='#/'+t.dataset.r);
+addEventListener('hashchange',()=>{route();scrollTo(0,0)});
+
+/* ===== المكتبة ===== */
+function coverHTML(s,l){
+  const n=s.lessons.indexOf(l)+1;
+  return `<div class="cover ${l.project?'project':''}"><span class="no">${esc(l.no)}</span><span class="big">${l.project?'✦':(l.mark||n)}</span><span class="ttl">${esc(l.title)}</span></div>`;
+}
+function statusPill(l){return l.status==='ready'?'<span class="pill ready">جاهز</span>':'<span class="pill wip">قيد الإعداد</span>'}
+function renderLibrary(){
+  $('#v-library').innerHTML=LIBRARY.map(s=>`
+    <div class="shelf s-${s.id}">
+      <div class="shelf-head"><h2>${esc(s.name)}</h2><span class="unit">${esc(s.unit)}</span><span class="count">${s.lessons.filter(l=>l.status==='ready').length} من ${s.lessons.length} جاهزة</span></div>
+      <div class="books">${s.lessons.map(l=>{const c=S.lessonCfg[l.id];return`
+        <button class="book" onclick="location.hash='#/lesson/${l.id}'">
+          ${coverHTML(s,l)}
+          <div class="meta">${statusPill(l)}${c?`<span>${esc(classById(c.classId).name)}</span>`:''}</div>
+        </button>`}).join('')}</div>
+    </div>`).join('');
+}
+
+/* ===== صفحة الدرس ===== */
+function renderLesson(id){
+  const {subject:s,lesson:l}=findLesson(id), cfg=cfgOf(id), c=classById(cfg.classId);
+  const ab=S.absent[c.id]||[], gs=S.groups[c.id]||[];
+  const needGroups=cfg.drawMode==='groups'||cfg.compMode==='groups';
+  let n=1;
+  $('#v-lesson').innerHTML=`
+    <button class="back" onclick="location.hash='#/library'">→ المكتبة</button>
+    <div class="lesson s-${s.id}">
+      <div>${coverHTML(s,l)}</div>
+      <div>
+        <div class="eyebrow">${esc(s.name)} · ${esc(s.unit)}</div>
+        <h2>${esc(l.title)}</h2>
+        <div class="sub">${esc(l.no)} &nbsp;${statusPill(l)}</div>
+        ${l.status!=='ready'?`<div class="notice">⏳ <span>هذا الدرس قيد الإعداد. تقدرين تجهّزين إعداداته الآن (الفصل، القرعة، نوع المنافسة، المجموعات) وتنحفظ له، وتشتغل أول ما يجهز.</span></div>`:''}
+
+        <div class="step"><h3><span class="n">${n++}</span>الفصل</h3>
+          <p class="hint">اختاري الفصل اللي بتقدمين له الدرس</p>
+          <div class="choices">${S.classes.map(k=>`<button class="choice ${k.id===c.id?'on':''}" data-cls="${k.id}">${esc(k.name)}<small>${k.students.length} طالبة</small></button>`).join('')}</div>
+        </div>
+
+        <div class="step"><h3><span class="n">${n++}</span>الحاضرات</h3>
+          <p class="hint">اضغطي على اسم الغائبة لاستبعادها من القرعة — الحاضرات: <b>${c.students.length-ab.length}</b> من ${c.students.length}</p>
+          <div class="names">${c.students.map(st=>`<span class="nm ${ab.includes(st.id)?'off':''}" data-abs="${st.id}" title="${esc(st.name)}">${esc(short(st.name))}</span>`).join('')}</div>
+        </div>
+
+        <div class="step"><h3><span class="n">${n++}</span>طريقة اختيار المشاركات</h3>
+          <div class="choices">${Object.entries(DRAW_LABEL).map(([k,v])=>`<button class="choice ${cfg.drawMode===k?'on':''}" data-draw="${k}">${v}</button>`).join('')}</div>
+        </div>
+
+        <div class="step"><h3><span class="n">${n++}</span>نوع الدرس</h3>
+          <div class="choices">${Object.entries(COMP_LABEL).map(([k,v])=>`<button class="choice ${cfg.compMode===k?'on':''}" data-comp="${k}">${v}</button>`).join('')}</div>
+        </div>
+
+        <div class="step"><h3><span class="n">${n++}</span>مجموعات ${esc(c.name)}</h3>
+          <p class="hint">${needGroups?'هذا الدرس يحتاج مجموعات — المجموعات محفوظة للفصل وتُستخدم في كل الدروس':'اختياري — المجموعات محفوظة للفصل وتُستخدم في كل الدروس'}</p>
+          <div class="gtools">
+            <select id="gBy"><option value="count">عدد المجموعات</option><option value="size">طالبات في كل مجموعة</option></select>
+            <input type="number" id="gN" value="${gs.length||4}" min="1" max="30" style="width:70px">
+            <select id="gHow"><option value="random">عشوائي</option><option value="balanced">متوازن حسب درجات ${esc(s.name)}</option></select>
+            <button class="btn sm" id="gAuto">كوّني</button>
+            <button class="btn soft sm" id="gAdd">＋ مجموعة</button>
+            ${gs.length?'<button class="btn danger sm" id="gClear">حذف الكل</button>':''}
+          </div>
+          <div id="gBox"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="startLesson" ${l.status==='ready'&&l.path?'':'disabled'}>ابدئي الدرس ←</button>
+          ${cfg.drawMode!=='none'?`<button class="btn line" id="quickDraw">${DRAW_LABEL[cfg.drawMode]} الآن</button>`:''}
+          ${l.status!=='ready'&&l.path?`<a class="btn soft" href="${l.path}" target="_blank" style="text-decoration:none">معاينة المسودة</a>`:''}
+        </div>
+      </div>
+    </div>`;
+  const set=(k,v)=>{cfg[k]=v;save();renderLesson(id)};
+  $$('[data-cls]').forEach(b=>b.onclick=()=>set('classId',b.dataset.cls));
+  $$('[data-draw]').forEach(b=>b.onclick=()=>set('drawMode',b.dataset.draw));
+  $$('[data-comp]').forEach(b=>b.onclick=()=>set('compMode',b.dataset.comp));
+  $$('[data-abs]').forEach(b=>b.onclick=()=>{const L=S.absent[c.id]=S.absent[c.id]||[];const i=L.indexOf(b.dataset.abs);i<0?L.push(b.dataset.abs):L.splice(i,1);save();renderLesson(id)});
+  renderGroups(c,s.id,()=>renderLesson(id));
+  $('#gAuto').onclick=()=>autoGroups(c,s.id,()=>renderLesson(id));
+  $('#gAdd').onclick=()=>{const g=S.groups[c.id]=S.groups[c.id]||[];g.push(newGroup(g.length));save();renderLesson(id)};
+  $('#gClear')&&($('#gClear').onclick=()=>{if(confirm('حذف كل مجموعات '+c.name+'؟')){S.groups[c.id]=[];save();renderLesson(id)}});
+  $('#quickDraw')&&($('#quickDraw').onclick=()=>openDraw(c,cfg.drawMode));
+  $('#startLesson').onclick=()=>{publishLesson(l,s,c,cfg);location.href=l.path};
+}
+
+/* بيانات الدرس الحالية لصفحة الدرس */
+function publishLesson(l,s,c,cfg){
+  const ab=S.absent[c.id]||[];
+  try{localStorage.setItem('reema-lesson',JSON.stringify({
+    lessonId:l.id,title:l.title,subject:s.name,teacher:'أ. '+S.settings.teacher,school:S.settings.school,
+    className:c.name,drawMode:cfg.drawMode,compMode:cfg.compMode,
+    students:c.students.filter(x=>!ab.includes(x.id)).map(x=>({id:x.id,name:x.name,short:short(x.name)})),
+    groups:(S.groups[c.id]||[]).map(g=>({id:g.id,name:g.name,color:g.color,members:g.members.filter(m=>!ab.includes(m)).map(m=>short(nameOf(m)))}))
+  }))}catch(e){}
+}
+
+/* ===== المجموعات ===== */
+function newGroup(i){return{id:uid(),name:'المجموعة '+(i+1),color:GCOLORS[i%GCOLORS.length],members:[]}}
+function total(sid,sub){const r=S.grades[sub][sid]||[];return r.reduce((a,v)=>a+(+v||0),0)}
+function autoGroups(c,sub,done){
+  const ab=S.absent[c.id]||[]; let st=c.students.filter(s=>!ab.includes(s.id));
+  const n=Math.max(1,+$('#gN').value||1), count=$('#gBy').value==='count'?Math.min(n,st.length):Math.ceil(st.length/n);
+  if((S.groups[c.id]||[]).length&&!confirm('ستُستبدل مجموعات '+c.name+' الحالية. متابعة؟'))return;
+  const gs=Array.from({length:count},(_,i)=>newGroup(i));
+  if($('#gHow').value==='balanced'){st=shuffle(st).sort((a,b)=>total(b.id,sub)-total(a.id,sub));st.forEach((s,i)=>{const r=Math.floor(i/count),k=i%count;gs[r%2?count-1-k:k].members.push(s.id)})}
+  else shuffle(st).forEach((s,i)=>gs[i%count].members.push(s.id));
+  S.groups[c.id]=gs;save();done();toast('تم تكوين '+count+' مجموعات');
+}
+function renderGroups(c,sub,done){
+  const gs=S.groups[c.id]||[], opts=gs.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join('');
+  const inG=new Set(gs.flatMap(g=>g.members)), loose=c.students.filter(s=>!inG.has(s.id));
+  $('#gBox').innerHTML=(gs.length?`<div class="gl">${gs.map(g=>`
+    <div class="g" style="--c:${g.color}" data-drop="${g.id}">
+      <div class="gh"><input value="${esc(g.name)}" data-rn="${g.id}"><span style="color:var(--ink3);font-size:13px">${g.members.length}</span><button class="x" data-dg="${g.id}" title="حذف">×</button></div>
+      ${g.members.map(m=>`<div class="m" draggable="true" data-sid="${m}" title="${esc(nameOf(m))}">${esc(short(nameOf(m)))}<select data-mv="${m}"><option value="${g.id}">نقل</option>${opts}<option value="">بدون</option></select></div>`).join('')}
+    </div>`).join('')}</div>`:'<div class="empty">لا توجد مجموعات لهذا الفصل بعد.</div>')
+    +(gs.length&&loose.length?`<div class="loose names" data-drop="">${loose.map(s=>`<span class="nm m" draggable="true" data-sid="${s.id}">${esc(short(s.name))} <select data-mv="${s.id}"><option value="">إلى</option>${opts}</select></span>`).join('')}</div>`:'');
+  const move=(sid,gid)=>{gs.forEach(g=>g.members=g.members.filter(m=>m!==sid));const g=gs.find(g=>g.id===gid);g&&g.members.push(sid);save();done()};
+  $$('[data-mv]').forEach(s=>s.onchange=()=>move(s.dataset.mv,s.value));
+  $$('[data-rn]').forEach(i=>i.onchange=()=>{gs.find(g=>g.id===i.dataset.rn).name=i.value.trim()||'مجموعة';save()});
+  $$('[data-dg]').forEach(b=>b.onclick=()=>{S.groups[c.id]=gs.filter(g=>g.id!==b.dataset.dg);save();done()});
+  $$('#gBox [draggable]').forEach(m=>m.ondragstart=e=>e.dataTransfer.setData('text',m.dataset.sid));
+  $$('#gBox [data-drop]').forEach(z=>{z.ondragover=e=>{e.preventDefault();z.classList.add('over')};z.ondragleave=()=>z.classList.remove('over');z.ondrop=e=>{e.preventDefault();move(e.dataTransfer.getData('text'),z.dataset.drop)}});
+}
+
+/* ===== القرعة السريعة ===== */
+let drawCtx=null, drawn=[];
+function openDraw(c,mode){
+  if(mode==='groups'&&!(S.groups[c.id]||[]).length)return toast('كوّني المجموعات أولًا');
+  drawCtx={c,mode};drawn=[];
+  $('#drawTitle').textContent=DRAW_LABEL[mode]+' — '+c.name;$('#drawWho').textContent='؟';$('#drawWho').className='who';$('#drawFull').textContent='';
+  $('#drawDlg').showModal();
+}
+function drawPool(){
+  const {c,mode}=drawCtx, ab=S.absent[c.id]||[];
+  if(mode==='groups')return(S.groups[c.id]||[]).filter(g=>g.members.length).map(g=>({id:g.id,label:g.name,full:g.members.map(m=>short(nameOf(m))).join('، ')}));
+  return c.students.filter(s=>!ab.includes(s.id)).map(s=>({id:s.id,label:short(s.name),full:s.name}));
+}
+$('#drawGo').onclick=()=>{
+  const all=drawPool(); if(!all.length)return; let pool=all;
+  if($('#noRepeat').checked){pool=all.filter(x=>!drawn.includes(x.id));if(!pool.length){drawn=[];pool=all;toast('اكتملت الدورة — من جديد')}}
+  const win=pool[Math.floor(Math.random()*pool.length)], el=$('#drawWho'); el.className='who spin'; $('#drawFull').textContent='';$('#drawGo').disabled=true;
+  let k=0,d=45;(function t(){el.textContent=all[Math.floor(Math.random()*all.length)].label;if(++k<24){d*=1.1;setTimeout(t,d)}else{el.textContent=win.label;el.className='who win';$('#drawFull').textContent=win.full;drawn.push(win.id);$('#drawGo').disabled=false}})();
+};
+
+/* ===== الفصول والطالبات ===== */
+function grade(t,any){if(!any)return['—','t-na'];if(t>=90)return['ممتاز','t-ex'];if(t>=80)return['جيد جدًا','t-vg'];if(t>=70)return['جيد','t-g'];if(t>=50)return['مقبول','t-p'];return['ضعيف','t-f']}
+function rowOf(sid,sub){const n=GRADEBOOK[sub].reduce((a,g)=>a+g.items.length,0);return S.grades[sub][sid]=S.grades[sub][sid]||Array(n).fill(null)}
+function totals(sid,sub){const r=rowOf(sid,sub);let i=0,any=false;const parts=GRADEBOOK[sub].map(g=>{let t=0;g.items.forEach(()=>{const v=r[i++];if(v!=null&&v!==''){t+=+v;any=true}});return t});return{parts,total:parts.reduce((a,b)=>a+b,0),any}}
+function renderClasses(){
+  const c=classById(S.ui.classId), sub=S.ui.subject, gb=GRADEBOOK[sub], subjName=LIBRARY.find(x=>x.id===sub).name;
+  let h=`<div class="classbar">
+    <div class="seg">${S.classes.map(k=>`<button data-c="${k.id}" class="${k.id===c.id?'on':''}">${esc(k.name)}</button>`).join('')}</div>
+    <div class="seg">${LIBRARY.map(x=>`<button data-s="${x.id}" class="${x.id===sub?'on':''}">${esc(x.name)}</button>`).join('')}</div>
+    <span style="flex:1"></span>
+    <button class="btn soft sm" id="renameClass">تعديل اسم الفصل</button>
+    <button class="btn soft sm" id="addSt">＋ طالبة</button>
+    <button class="btn soft sm" id="csv">تصدير Excel</button>
+    <button class="btn soft sm" onclick="print()">طباعة</button>
+  </div>
+  <div class="tw"><table><thead><tr><th rowspan="2">م</th><th rowspan="2" class="who">اسم الطالبة</th>`;
+  gb.forEach(g=>h+=`<th class="grp" colspan="${g.items.length+1}">${g.name}</th>`);
+  h+=`<th rowspan="2">المجموع<br>100</th><th rowspan="2">التقدير</th><th rowspan="2" class="noprint"></th></tr><tr>`;
+  gb.forEach(g=>{g.items.forEach(([n,m])=>h+=`<th>${n}<br><b>${m}</b></th>`);h+=`<th>المجموع<br><b>${g.max}</b></th>`});
+  h+='</tr></thead><tbody>';
+  c.students.forEach((st,ix)=>{const r=rowOf(st.id,sub),t=totals(st.id,sub),[gl,gc]=grade(t.total,t.any);let i=0;
+    h+=`<tr data-sid="${st.id}"><td>${ix+1}</td><td class="who" title="${esc(st.name)}">${esc(st.name)}</td>`;
+    gb.forEach((g,gi)=>{g.items.forEach(([,m])=>{h+=`<td><input class="gr" inputmode="decimal" data-i="${i}" data-max="${m}" value="${r[i]??''}"></td>`;i++});h+=`<td class="sum" data-p="${gi}">${t.parts[gi]}</td>`});
+    h+=`<td class="tot">${t.any?t.total:'—'}</td><td><span class="tag ${gc}">${gl}</span></td><td class="noprint"><button class="x" style="border:0;background:none;cursor:pointer;color:var(--ink3)" data-del="${st.id}" title="حذف">×</button></td></tr>`});
+  $('#v-classes').innerHTML=h+'</tbody></table></div>';
+  $$('[data-c]').forEach(b=>b.onclick=()=>{S.ui.classId=b.dataset.c;save();renderClasses()});
+  $$('[data-s]').forEach(b=>b.onclick=()=>{S.ui.subject=b.dataset.s;save();renderClasses()});
+  $$('input.gr').forEach(inp=>inp.oninput=()=>{
+    const tr=inp.closest('tr'),sid=tr.dataset.sid,max=+inp.dataset.max,raw=inp.value.trim().replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    const v=raw===''?null:+raw,bad=v!=null&&(isNaN(v)||v<0||v>max);inp.classList.toggle('bad',bad);if(bad)return;
+    rowOf(sid,sub)[+inp.dataset.i]=v;save();const t=totals(sid,sub),[gl,gc]=grade(t.total,t.any);
+    tr.querySelectorAll('.sum').forEach(td=>td.textContent=t.parts[+td.dataset.p]);tr.querySelector('.tot').textContent=t.any?t.total:'—';
+    const tg=tr.querySelector('.tag');tg.className='tag '+gc;tg.textContent=gl;
+  });
+  $$('[data-del]').forEach(b=>b.onclick=()=>{if(!confirm('حذف "'+nameOf(b.dataset.del)+'" من '+c.name+'؟'))return;c.students=c.students.filter(s=>s.id!==b.dataset.del);(S.groups[c.id]||[]).forEach(g=>g.members=g.members.filter(m=>m!==b.dataset.del));save();renderClasses()});
+  $('#addSt').onclick=()=>{const n=prompt('اسم الطالبة:');if(n&&n.trim()){c.students.push({id:c.id+'-'+uid(),name:n.trim()});save();renderClasses()}};
+  $('#renameClass').onclick=()=>{const n=prompt('اسم الفصل:',c.name);if(n&&n.trim()){c.name=n.trim();save();renderClasses()}};
+  $('#csv').onclick=()=>{const head=['م','اسم الطالبة'];gb.forEach(g=>{g.items.forEach(([n,m])=>head.push(`${n} (${m})`));head.push(`مجموع ${g.name} (${g.max})`)});head.push('المجموع الكلي','التقدير');
+    const rows=[head];c.students.forEach((st,i)=>{const r=rowOf(st.id,sub),t=totals(st.id,sub);let k=0;const row=[i+1,st.name];gb.forEach((g,gi)=>{g.items.forEach(()=>row.push(r[k++]??''));row.push(t.parts[gi])});row.push(t.total,grade(t.total,t.any)[0]);rows.push(row)});
+    download('﻿'+rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\r\n'),`درجات ${subjName} - ${c.name}.csv`,'text/csv;charset=utf-8')};
+}
+
+/* ===== الإعدادات ===== */
+$('#openSettings').onclick=()=>{
+  [['sTeacher','teacher'],['sSchool','school'],['sYear','year']].forEach(([id,k])=>{const i=$('#'+id);i.value=S.settings[k]||'';i.oninput=()=>{S.settings[k]=i.value;save();route()}});
+  $('#setDlg').showModal();
+};
+$('#backup').onclick=()=>download(JSON.stringify(S),`نسخة مكتبة الدروس ${new Date().toISOString().slice(0,10)}.json`,'application/json');
+$('#restore').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.classes)throw 0;S=d;save();route();toast('تم الاستيراد')}catch(_){alert('الملف غير صالح')}};r.readAsText(f);e.target.value=''};
+$('#factory').onclick=()=>{if(!confirm('حذف كل التعديلات والرجوع لبيانات الإكسل الأصلية؟'))return;const k=S.settings;S=fresh();S.settings=k;save();route();toast('تمت الاستعادة')};
+
+route();
+</script>
+</body>
+</html>
