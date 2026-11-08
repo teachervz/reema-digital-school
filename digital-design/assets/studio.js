@@ -238,7 +238,7 @@ R.title = {
       ${teams}
       <div class="rv"><button class="btn hot lg start-btn">${s.start||'🚀 لنبدأ التصميم'}</button></div>
     </div>
-    <div class="hero-art rv">
+    ${window.HERO_ART?`<div class="hero-art rv">${HERO_ART(firstName)}</div>`:`<div class="hero-art rv">
       <div class="hw"><div class="hw-bar"><span class="dots"><i></i><i></i><i></i></span><span class="hw-url">🔒 www.my-first-site.sa</span></div>
         <div class="hw-body">
           <div class="hw-nav"><div class="pb"></div><div class="pb"></div><div class="pb"></div><div class="pb"></div></div>
@@ -249,7 +249,7 @@ R.title = {
       <div class="hw-type">Aa<small>Readex Pro · 72</small></div>
       <div class="mcur c1">${CUR_SVG('#5B5BF7')}<span>${esc(firstName)}</span></div>
       <div class="mcur c2">${CUR_SVG('#FF6B57')}<span>الطالبات</span></div>
-    </div></div>`;
+    </div>`}</div>`;
   },
   init:sec=>{ $('.start-btn',sec).onclick=()=>next(); }
 };
@@ -1162,7 +1162,7 @@ R.elemlab = {
   init:(sec,s)=>{
     const st=$('.el-stage',sec), vars=$('.el-vars',sec), def=$('.el-def',sec), tabs=$$('.el-tab',sec);
     const pick=(k,quiet)=>{
-      const it=s.items[k], D=EL_DEMOS[it.k]; tabs.forEach(t=>t.classList.toggle('on',+t.dataset.k===k)); if(!quiet) tabs[k].classList.add('seen');
+      const it=s.items[k], D=it.demos||EL_DEMOS[it.k]; tabs.forEach(t=>t.classList.toggle('on',+t.dataset.k===k)); if(!quiet) tabs[k].classList.add('seen');
       def.style.setProperty('--c',it.color); def.innerHTML=`<b>${it.t} ${it.en}:</b> ${it.d}`;
       vars.innerHTML=D.map((v,j)=>`<button class="el-v" data-j="${j}">${v.t}</button>`).join('');
       const show=j=>{ st.innerHTML=D[j].h; retrigger(st,'pop'); $$('.el-v',vars).forEach(b=>b.classList.toggle('on',+b.dataset.j===j)); };
@@ -1198,12 +1198,12 @@ const PR_DEMOS = {
 };
 R.principles = {
   html:s=>`<div class="pr-tabs rv">${s.items.map((it,k)=>`<button class="pr-tab" data-k="${k}" style="--c:${it.color}"><span>${it.icon}</span><b>${it.t}</b><small>${it.en}</small></button>`).join('')}</div>
-    <div class="pr-main rv"><div class="pr-frame"><div class="pr-switch"><button data-m="bad">❌ بدون المبدأ</button><button data-m="good">✅ مع المبدأ</button></div><div class="pr-stage"></div></div><div class="pr-info"></div></div>`,
+    <div class="pr-main rv"><div class="pr-frame"><div class="pr-switch"><button data-m="bad">${(s.labels||[])[0]||'❌ بدون المبدأ'}</button><button data-m="good">${(s.labels||[])[1]||'✅ مع المبدأ'}</button></div><div class="pr-stage"></div></div><div class="pr-info"></div></div>`,
   init:(sec,s)=>{
     let k=0, m='bad'; const stg=$('.pr-stage',sec), info=$('.pr-info',sec);
-    const draw=()=>{ const it=s.items[k]; stg.innerHTML=PR_DEMOS[it.k][m]; stg.dataset.m=m; retrigger(stg,'pop');
+    const draw=()=>{ const it=s.items[k]; stg.innerHTML=(it.demos||PR_DEMOS[it.k])[m]; stg.dataset.m=m; retrigger(stg,'pop');
       $$('.pr-switch button',sec).forEach(b=>b.classList.toggle('on',b.dataset.m===m));
-      info.style.setProperty('--c',it.color); info.innerHTML=`<div class="pi-ic">${it.icon}</div><h3>${it.t}<small>${it.en}</small></h3><p>${it.d}</p>${m==='good'?`<div class="pi-ex">✅ ${it.ex}</div>`:'<div class="pi-q">🤔 ما المشكلة في هذا التصميم؟ ثم اضغطي «مع المبدأ»</div>'}`; };
+      info.style.setProperty('--c',it.color); info.innerHTML=`<div class="pi-ic">${it.icon}</div><h3>${it.t}<small>${it.en}</small></h3><p>${it.d}</p>${m==='good'?`<div class="pi-ex">✅ ${it.ex}</div>`:`<div class="pi-q">${s.q||'🤔 ما المشكلة في هذا التصميم؟ ثم اضغطي «مع المبدأ»'}</div>`}`; };
     $$('.pr-tab',sec).forEach(b=>b.onclick=()=>{ k=+b.dataset.k; m='bad'; $$('.pr-tab',sec).forEach(x=>x.classList.toggle('on',x===b)); draw(); sound.pop(); });
     $$('.pr-switch button',sec).forEach(b=>b.onclick=()=>{ m=b.dataset.m; draw(); if(m==='good'){ sound.ding(); $$('.pr-tab',sec)[k].classList.add('seen'); if(!$$('.pr-tab:not(.seen)',sec).length&&!sec._all){ sec._all=1; setTimeout(()=>celebrate(stg,true),300); } } else sound.pop(); });
     $$('.pr-tab',sec)[0].classList.add('on'); draw();
@@ -1295,6 +1295,8 @@ R.visualize = {
 
 /* ---------------- 🧱 بناء الشرائح ---------------- */
 const PRINT = location.hash==='#print';
+if(window.R_EXT) Object.assign(R, window.R_EXT);   // قوالب إضافية من ملفات الفصول (مثل character.js)
+if(LESSON.theme) document.body.classList.add('theme-'+LESSON.theme);
 const ACTIVE = SLIDES.filter(s=>!(s.comp && !COMP));
 const stage=$('#stage'); const slides=[]; let current=0;
 const ANIMS=['slide','fade','zoom'];
@@ -1303,7 +1305,7 @@ if(!PRINT) ACTIVE.forEach((s,i)=>{
   const sec=document.createElement('section'); sec.className='slide t-'+s.type;
   const showTitle=s.title&&!['title','closing'].includes(s.type);
   const head=(s.tag?`<div class="tag rv">${s.tag}</div>`:'')+(showTitle?`<h2 class="title rv"><span class="sel">${s.title}<i class="hd a"></i><i class="hd b"></i><i class="hd c"></i><i class="hd d"></i><em class="dim">H 82 · Readex Pro</em></span></h2>`:'');
-  sec.innerHTML=`<div class="ab-label"><i></i>Artboard ${String(i+1).padStart(2,'0')} — ${s.type}</div><div class="slide-inner">${head}<div class="content">${r.html(s,i)}</div></div>`;
+  sec.innerHTML=`<div class="ab-label"><i></i>${LESSON.abLabel||'Artboard'} ${String(i+1).padStart(2,'0')} — ${s.type}</div><div class="slide-inner">${head}<div class="content">${r.html(s,i)}</div></div>`;
   stage.appendChild(sec);
   $$('.rv',sec).forEach((el,k)=>el.style.setProperty('--i',Math.min(k,9)));
   try{ r.init&&r.init(sec,s,i); }catch(e){ console.error(s.id,e); }
@@ -1411,7 +1413,8 @@ $('#scClose').onclick=()=>$('#score').classList.remove('open');
 $('#scReset').onclick=()=>{ if(confirm('تصفير جميع النقاط؟')){ scores.fill(0); drawScores(); saveProgress(); } };
 if(!COMP){ $('#scoreBtn').style.display='none'; }
 let awardT;
-function showAward(pts){
+function showAward(pts, manual){
+  if(!manual) return; // لا يظهر صندوق «مَن أجابت؟» تلقائيًا — المعلمة تضيف النقاط يدويًا من لوحة 🏆
   if(!COMP) return;
   pts = pts || slides[current].cfg.points || LESSON.defaultPoints || 1;
   const box=$('#award'), many=LESSON.teams.length>10;

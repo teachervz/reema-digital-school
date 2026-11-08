@@ -1574,7 +1574,8 @@ drawScores();
 
 /* نافذة «أي مجموعة أجابت؟» — تظهر بعد كل إجابة صحيحة */
 let awardT;
-function showAward(pts){
+function showAward(pts, manual){
+  if(!manual) return; // لا يظهر صندوق «مَن أجابت؟» تلقائيًا — المعلمة تضيف النقاط يدويًا من لوحة 🏆
   pts = pts || slides[current].cfg.points || LESSON.defaultPoints || 1;
   const box=$('#award');
   $('#awPts').textContent='+'+pts;
