@@ -688,6 +688,102 @@ html,body{background:#03050F}
 #vidModal .vbox{position:relative;width:min(1100px,90vw);border-radius:24px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);background:#000}
 #vidModal video{display:block;width:100%;max-height:80vh}
 #vidModal .vclose{position:absolute;top:12px;left:12px;z-index:2;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.9);font-size:22px;font-weight:800;cursor:pointer}
+
+/* =========================================================
+   📚 الربط بالمكتبة: التحضير + خريطة الشرائح + الاستكمال + الطباعة
+   ========================================================= */
+:root{--pw:min(36vw,560px);--line:#DDD8F5;--ps:#EDE9FE;--pss:#F6F4FF;--pd:#5B21B6;--pdd:#2E1065;--ok:#10B981}
+#controls a{display:inline-flex;align-items:center;text-decoration:none;background:rgba(255,255,255,.12);color:#fff;font-size:clamp(12px,.9vw,15px);padding:5px 11px;border-radius:999px}
+#controls a:hover{background:rgba(255,255,255,.28)}
+#controls button.on{background:var(--cyan);color:#0B1030}
+body.prep-open #hint{display:none}
+body.prep-open #controls{left:14px}
+#prep{position:fixed;top:0;right:0;bottom:0;width:var(--pw);z-index:75;background:#FBFAFF;color:var(--ink);border-left:1px solid var(--line);box-shadow:-20px 0 50px -20px rgba(0,0,0,.6);
+  transform:translateX(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;font-size:15px;-webkit-user-select:text;user-select:text;cursor:auto}
+body.prep-open #prep{transform:none}
+#prep button{font-family:inherit;cursor:pointer;border:0}
+.pp-head{display:flex;align-items:flex-start;gap:12px;padding:18px 20px 14px;background:linear-gradient(135deg,#1E1B4B,#4C1D95);color:#fff}
+.pp-head small{font-size:13px;color:var(--cyan-l);font-weight:600;display:block}
+.pp-head h3{font-size:19px;font-weight:700;line-height:1.4;margin:2px 0 0}
+.pp-head .pp-nav{display:flex;gap:6px;margin-inline-start:auto}
+.pp-head button{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-size:16px;flex:none}
+.pp-head button:hover{background:rgba(255,255,255,.22)}
+.pp-body{flex:1;overflow:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.pp-body label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:700;color:var(--pd)}
+.pp-body input,.pp-body textarea,.pp-body select{font-family:inherit;font-size:15px;font-weight:400;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px 11px;outline:none;resize:vertical;line-height:1.6}
+.pp-body textarea{min-height:68px}
+.pp-body input:focus,.pp-body textarea:focus,.pp-body select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(124,92,255,.18)}
+.pp-row2{display:grid;grid-template-columns:110px 1fr;gap:10px}
+.pp-row2 label{min-width:0}.pp-row2 select{width:100%;min-width:0}
+.pp-tip{font-size:14px;line-height:1.7;background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:10px;padding:8px 12px;color:#78350F}
+.pp-tip:empty{display:none}
+.pp-done{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);background:#fff;border:1.5px dashed var(--line);border-radius:10px;padding:7px 11px}
+.pp-done b{color:var(--ok)}
+.pp-foot{border-top:1px solid var(--line);padding:12px 20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff}
+.pp-foot .grow{flex:1}
+#ppSaved{font-size:13px;color:var(--ok);font-weight:700;opacity:0;transition:opacity .3s}
+#ppSaved.on{opacity:1}
+#ppTotal{font-size:13px;color:var(--muted);width:100%}
+#ppTotal b{color:var(--pd)}
+.pbtn{font-size:13.5px;font-weight:700;padding:7px 12px;border-radius:9px;background:var(--pss);color:var(--pd);border:1.5px solid var(--line)!important}
+.pbtn:hover{border-color:var(--p)!important}
+.pbtn.dark{background:var(--pdd);color:#fff;border-color:var(--pdd)!important}
+
+.ov{position:fixed;inset:0;z-index:90;background:rgba(3,5,15,.7);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;cursor:auto}
+.ov.open{display:flex}
+.ov button{font-family:inherit;cursor:pointer;border:0}
+.ov-card{background:#fff;color:var(--ink);border-radius:3vmin;padding:3vmin;box-shadow:0 30px 70px -20px rgba(0,0,0,.6),0 0 0 1px rgba(148,163,255,.35);animation:pop .4s;max-width:92vw;max-height:90vh;display:flex;flex-direction:column}
+.ov-head{display:flex;align-items:center;gap:1.4vmin;font-size:2.8vmin;font-weight:800;color:var(--pdd);margin-bottom:2vmin}
+.ov-head .ov-x{margin-inline-start:auto;font-size:2.6vmin;color:var(--muted);width:5vmin;height:5vmin;border-radius:1.4vmin;background:none}
+.ov-head .ov-x:hover{background:var(--pss)}
+.ovw-card{width:min(94vw,170vmin)}
+#ovwStat{font-size:2vmin;font-weight:600;color:var(--muted)}
+.ovw-prog{height:1.2vmin;border-radius:9px;background:var(--pss);overflow:hidden;margin-bottom:2vmin}
+.ovw-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),var(--p));border-radius:9px}
+.ovw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(25vmin,1fr));gap:1.4vmin;overflow:auto;padding:.4vmin}
+.ovw-it{position:relative;text-align:right;background:var(--pss);border:2px solid var(--line)!important;border-radius:1.6vmin;padding:1.2vmin 1.4vmin;display:flex;flex-direction:column;gap:.4vmin;transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;min-height:12.5vmin;color:var(--ink)}
+.ovw-it:hover{border-color:var(--p)!important;transform:translateY(-2px)}
+.ovw-it .ovn{font-size:1.6vmin;color:var(--muted);direction:ltr;text-align:right;font-weight:700}
+.ovw-it .ovt{font-size:1.9vmin;font-weight:700;line-height:1.4}
+.ovw-it .ovg{font-size:1.5vmin;color:var(--muted)}
+.ovw-it.seen{background:#fff;border-color:#A7F3D0!important}
+.ovw-it.seen::after{content:"✓";position:absolute;left:1vmin;top:1vmin;width:2.8vmin;height:2.8vmin;border-radius:50%;background:var(--ok);color:#fff;font-size:1.6vmin;display:grid;place-items:center}
+.ovw-it.cur{border-color:var(--p)!important;box-shadow:0 0 0 .5vmin rgba(124,92,255,.25);background:#fff}
+.ovw-it .pm{position:absolute;left:4.4vmin;top:1vmin;font-size:1.8vmin}
+.rs-card{width:min(86vw,96vmin);text-align:center;align-items:center;gap:1.6vmin}
+.rs-ic{font-size:9vmin}
+.rs-card h3{font-size:3.4vmin;color:var(--pdd);margin:0}
+.rs-card p{font-size:2.3vmin;color:var(--muted);line-height:1.6;margin:0}
+.rs-card p b{color:var(--pd)}
+.rs-bar{width:100%;height:1.6vmin;border-radius:9px;background:var(--pss);overflow:hidden}
+.rs-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--p));border-radius:9px}
+.rs-btns{display:flex;gap:1.4vmin;flex-wrap:wrap;justify-content:center;margin-top:1vmin}
+.rbtn{font-size:2.3vmin;font-weight:800;padding:1.1vmin 2.8vmin;border-radius:1.6vmin;background:var(--pss);color:var(--pd)}
+.rbtn.pri{background:linear-gradient(135deg,#7C5CFF,#06B6D4);color:#fff}
+
+#printDoc{display:none}
+body.print-mode,html:has(body.print-mode){overflow:auto;height:auto;background:#fff;-webkit-user-select:text;user-select:text}
+body.print-mode>*:not(#printDoc){display:none!important}
+body.print-mode #printDoc{display:block;max-width:1200px;margin:0 auto;padding:30px 28px 60px;font-size:14px;color:#1d1d1f;direction:rtl}
+.pd-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;border-bottom:3px solid var(--pd);padding-bottom:12px;margin-bottom:14px}
+.pd-head h1{font-size:26px;color:var(--pdd);line-height:1.35;margin:0}
+.pd-head .sub{color:#555;font-size:14px}
+.pd-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 14px;margin-bottom:14px}
+.pd-meta div{border:1px solid #DDD;border-radius:8px;padding:6px 10px}
+.pd-meta b{display:block;font-size:12px;color:#666;font-weight:600}
+.pd-goals{border:1px solid #DDD;border-radius:8px;padding:8px 14px;margin-bottom:14px}
+.pd-goals h3{font-size:15px;margin:0 0 4px}
+.pd-goals ol{padding-right:20px;line-height:1.8;margin:0}
+#printDoc table{width:100%;border-collapse:collapse;font-size:12.5px}
+#printDoc th,#printDoc td{border:1px solid #D2D2D7;padding:6px 7px;vertical-align:top;text-align:right;line-height:1.6;white-space:pre-line}
+#printDoc th{background:var(--ps);color:var(--pdd);font-weight:700}
+#printDoc td small{display:block;color:#666}
+#printDoc tr{break-inside:avoid}
+.pd-tools{display:flex;gap:10px;margin-bottom:16px}
+.pd-tools button{font-family:inherit;font-size:15px;font-weight:700;padding:8px 18px;border-radius:10px;background:var(--pd);color:#fff;border:0;cursor:pointer}
+.pd-tools button.l{background:var(--pss);color:var(--pd)}
+.pd-sign{display:flex;justify-content:space-between;margin-top:26px;font-size:14px}
+@media print{.pd-tools{display:none}body.print-mode #printDoc{padding:0}@page{size:A4 landscape;margin:12mm}}
 </style>
 </head>
 <body>
@@ -704,10 +800,35 @@ html,body{background:#03050F}
   <button id="btnNext" title="التالي (→ أو Space)">التالي →</button>
   <button id="btnClap" title="تصفيق (ت)">👏</button>
   <button id="btnFull" title="ملء الشاشة (F)">⛶</button>
-  <button id="btnNotes" title="ملاحظات المعلمة (N)">📝</button>
+  <button id="btnMap" title="خريطة الشرائح (G)">🗂️</button>
+  <button id="btnNotes" title="تحضير الشريحة (P)">📝</button>
+  <a id="btnHome" href="../../index.html#/lesson/dt-3" title="العودة للمكتبة">🏠</a>
 </nav>
-<div id="hint"><bdi><b>Space</b> = التالي</bdi> &nbsp;|&nbsp; <bdi><b dir="ltr">← →</b> للتنقل</bdi> &nbsp;|&nbsp; <bdi><b>ت</b> = تصفيق</bdi> &nbsp;|&nbsp; <bdi><b>F</b> = ملء الشاشة</bdi></div>
+<div id="hint"><bdi><b>Space</b> = التالي</bdi> &nbsp;|&nbsp; <bdi><b dir="ltr">← →</b> للتنقل</bdi> &nbsp;|&nbsp; <bdi><b>ت</b> = تصفيق</bdi> &nbsp;|&nbsp; <bdi><b>P</b> التحضير</bdi> &nbsp;|&nbsp; <bdi><b>G</b> الخريطة</bdi> &nbsp;|&nbsp; <bdi><b>F</b> = ملء الشاشة</bdi></div>
 <aside id="notes"></aside>
+
+<!-- 📝 لوحة التحضير -->
+<aside id="prep">
+  <div class="pp-head"><div><small>📝 تحضير الشريحة <span id="ppNum"></span></small><h3 id="ppTitle"></h3></div>
+    <div class="pp-nav"><button id="ppPrev" title="الشريحة السابقة">→</button><button id="ppNext" title="الشريحة التالية">←</button><button id="ppClose" title="إغلاق">✕</button></div></div>
+  <div class="pp-body">
+    <div class="pp-tip" id="ppTip"></div>
+    <div class="pp-row2"><label>⏱️ الزمن (د)<input type="number" min="0" max="45" data-f="min"></label><label>🎯 الهدف المرتبط<select data-f="goal"></select></label></div>
+    <label>🧩 الاستراتيجية / الأسلوب<input type="text" data-f="st"></label>
+    <label>👩‍🏫 إجراءات المعلمة<textarea data-f="t" rows="3"></textarea></label>
+    <label>👭 نشاط الطالبات<textarea data-f="s" rows="3"></textarea></label>
+    <label>✅ التقويم<textarea data-f="ev" rows="2"></textarea></label>
+    <label>🗒️ ملاحظاتي<textarea data-f="note" rows="2" placeholder="ملاحظات خاصة بكِ لهذه الشريحة…"></textarea></label>
+    <div class="pp-done" id="ppDone"></div>
+  </div>
+  <div class="pp-foot"><span id="ppSaved">✓ تم الحفظ</span><span class="grow"></span><button class="pbtn" id="ppReset">↺ الافتراضي</button><button class="pbtn dark" id="ppPrint">🖨️ طباعة التحضير كاملًا</button><div id="ppTotal"></div></div>
+</aside>
+
+<!-- 🗂️ خريطة الشرائح + 👋 الاستكمال -->
+<div class="ov" id="ovw"><div class="ov-card ovw-card"><div class="ov-head">🗂️ خريطة الشرائح <span id="ovwStat"></span><button class="ov-x" data-close="ovw">✕</button></div><div class="ovw-prog"><i id="ovwBar"></i></div><div class="ovw-grid" id="ovwGrid"></div></div></div>
+<div class="ov" id="resume"><div class="ov-card rs-card"><div class="rs-ic">👋</div><h3 id="rsT"></h3><p id="rsP"></p><div class="rs-bar"><i id="rsBar"></i></div>
+  <div class="rs-btns"><button class="rbtn pri" id="rsGo"></button><button class="rbtn" id="rsNew">↺ من البداية</button></div></div></div>
+<div id="printDoc"></div>
 <canvas id="fx"></canvas>
 <div id="clapLayer"></div>
 <div id="toast"></div>
@@ -730,7 +851,7 @@ html,body{background:#03050F}
 
 const LESSON = {
   title:    'الذكاء الاصطناعي',
-  subtitle: 'الدرس الثاني — حين تتعلّم الآلة 🤖',
+  subtitle: 'الدرس الثالث — حين تتعلّم الآلة 🤖',
   teacher:  'أ. سارة السهلي',
   subject:  'التقنية الرقمية',
   grade:    'الصف الأول الثانوي',
@@ -753,35 +874,38 @@ const ML_STEPS = [
 const SLIDES = [
 
   /* 1) الشريحة الافتتاحية */
-  { type:'title', anim:'zoom',
+  { id:'title', type:'title', anim:'zoom',
     notes:'اضغطي زر «استمعي» ليُعرض فيديو الترحيب، وعند انتهائه ينتقل العرض تلقائيًا إلى مراجعة الدرس السابق.' },
 
-  /* 2) مراجعة: المراقبة والتحكم */
-  { type:'loopSort', anim:'slide', stage:'مراجعة الدرس السابق', strategy:'🧩 صنّفي وتذكّري',
-    title:'لنتذكّر: <span class="hl">المراقبة والتحكم</span> 🎛️',
+  /* 2) مراجعة: تطبيقات الهواتف الذكية وبناؤها */
+  { id:'review', type:'loopSort', anim:'slide', stage:'مراجعة الدرس السابق', strategy:'🧩 صنّفي وتذكّري',
+    title:'لنتذكّر: <span class="hl">تطبيقات الهواتف الذكية وبناؤها</span> 📱',
     concepts:[
-      {i:'⚖️', t:'مستشعر الضغط', d:'يحسّ بوزن السيارات المنتظرة فتطول الإشارة الخضراء.'},
-      {i:'🌡️', t:'مستشعر الحرارة', d:'في المكيّف والثلاجة والفرن والغلاية.'},
-      {i:'💧', t:'الرطوبة والماء', d:'ري الحدائق، وكشف تسرّب الماء في المنازل ومواقع العمل.'},
-      {i:'🔁', t:'التغذية الراجعة', d:'المخرجات تُراقَب وتعود لتعدّل عملية التحكم.'}
+      {i:'⚙️', t:'برامج النظام 🆚 التطبيقية', d:'برامج النظام تشغّل الجهاز وتديره (Android و iOS)، والبرامج التطبيقية تنجز مهامكِ (واتساب، توكلنا).'},
+      {i:'🎨', t:'UI 🆚 UX', d:'واجهة المستخدم UI تجعل التطبيق جميلًا، وتجربة المستخدم UX تجعله سهلًا ومحبوبًا.'},
+      {i:'🧱', t:'MIT App Inventor', d:'برنامج مجاني لبناء تطبيقات الهاتف بسحب المكونات وتركيب اللبنات دون كتابة الأكواد.'},
+      {i:'📦', t:'المتغير', d:'صندوق يحفظ قيمة تتغير أثناء عمل التطبيق، مثل count في تطبيق «مِسبحتي» 📿.'}
     ],
     bins:[
-      {i:'➡️', t:'نظام التحكم المفتوح', c:'#F59E0B', ex:'مثل: غسالة تعمل بمؤقت'},
-      {i:'🔁', t:'نظام التحكم المغلق', c:'#10B981', ex:'مثل: مكيّف بمستشعر حرارة'}
+      {i:'🎨', t:'المصمم Designer', c:'#0EA5E9', ex:'شكل التطبيق: ماذا تراه المستخدمة؟'},
+      {i:'🧩', t:'محرر اللبنات Blocks', c:'#EC4899', ex:'برمجة التطبيق: ماذا يفعل؟ ومتى؟'}
     ],
     items:[
-      {b:0, t:'لا توجد مقارنة بين القيم الناتجة الفعلية والقيم المطلوبة.'},
-      {b:0, t:'لا يقدّم أية تغذية راجعة.'},
-      {b:0, t:'لا يوجد للمخرجات أي تأثير على المدخلات أو في عملية التحكم.'},
-      {b:1, t:'تتم مراقبة المخرجات ومقارنتها مع المخرجات المتوقعة من النظام.'},
-      {b:1, t:'يقدّم التغذية الراجعة.'},
-      {b:1, t:'يستخدم معلومات مراقبة المخرجات في تعديل التحكم بالنظام وضبطه.'}
+      {b:0, t:'سحب زر Button وعنوان Label إلى شاشة الجوال.'},
+      {b:0, t:'تغيير خاصية Text للزر إلى «سبّحي» من لوحة الخصائص Properties.'},
+      {b:0, t:'إضافة مكوّن غير مرئي مثل Sound أو Notifier.'},
+      {b:1, t:'لبنة الحدث: when Button1.Click (عند الضغط على الزر).'},
+      {b:1, t:'زيادة قيمة المتغير count بمقدار 1 في كل ضغطة.'},
+      {b:1, t:'الشرط: إذا وصل العدد إلى 33 تظهر رسالة تنبيه.'}
     ],
-    task:'🧩 اقرئي الخاصية.. ثم اضغطي على النظام المناسب لها: <b>مفتوح</b> أم <b>مغلق</b>؟',
-    notes:'مراجعة سريعة لدرس المراقبة والتحكم (تدريب 2 من الكتاب). اسألي قبل كل إجابة: «هل يراقب النظام مخرجاته ويقارنها؟». ثم اكشفي بطاقات المستشعرات بالضغط عليها واطلبي مثالًا من البيت لكل مستشعر.' },
+    simTitle:'🧩 أين ننفّذ كل خطوة في MIT App Inventor؟',
+    hint:'🤔 فكّري: هل الخطوة تغيّر <b>شكل</b> التطبيق (المصمم)؟ أم تخبره <b>ماذا يفعل ومتى</b> (اللبنات)؟',
+    doneMsg:'💡 <b>المصمم</b> لبناء الواجهة.. و<b>محرر اللبنات</b> لبرمجة سلوك التطبيق.',
+    task:'🧩 اقرئي الخطوة.. ثم اضغطي على المكان المناسب لها: <b>المصمم</b> أم <b>محرر اللبنات</b>؟',
+    notes:'مراجعة سريعة لدرسي «مقدمة عن تطبيقات الهواتف الذكية» و«بناء تطبيقات الهاتف الذكي». اكشفي البطاقات الأربع بالقرعة واطلبي مثالًا لكل مفهوم، ثم صنّفي خطوات بناء تطبيق «مِسبحتي». جسر للدرس: «التطبيق ينفّذ ما برمجناه بالضبط.. فهل يمكن لتطبيق أن يتعلّم وحده؟» ← هذا هو الذكاء الاصطناعي.' },
 
   /* 5) التمهيد: من Teams إلى الذكاء الاصطناعي */
-  { type:'bridge', anim:'zoom', stage:'التمهيد', strategy:'🔮 ماذا تتوقعين؟',
+  { id:'bridge', type:'bridge', anim:'zoom', stage:'التمهيد', strategy:'🔮 ماذا تتوقعين؟',
     title:'اجتماع Teams مع معلمة من <span class="hl">بريطانيا</span> 🇬🇧.. كيف سنفهمها؟',
     speaker:'👩‍🏫', speakerName:'Ms. Sarah — London',
     lines:[
@@ -799,7 +923,7 @@ const SLIDES = [
     notes:'زر «استمعي» ينطق الجملة بالإنجليزية بصوت الحاسب. الكتاب يذكر الترجمة الفورية للمحادثات في Microsoft Teams كمثال على تعلّم الآلة.' },
 
   /* 6) نواتج التعلم */
-  { type:'goals', anim:'fade', stage:'نواتج التعلم', strategy:'🎯 أهداف واضحة',
+  { id:'goals', type:'goals', anim:'fade', stage:'نواتج التعلم', strategy:'🎯 أهداف واضحة',
     title:'في نهاية هذا الدرس ستكونين قادرة على.. 🎯',
     lead:'اضغطي على الهدف عند تحقّقه في نهاية الحصة ✔️',
     goals:[
@@ -812,7 +936,7 @@ const SLIDES = [
     ] },
 
   /* 7) العصف الذهني */
-  { type:'brainstorm', anim:'zoom', stage:'التمهيد', strategy:'🌪️ العصف الذهني',
+  { id:'brainstorm', type:'brainstorm', anim:'zoom', stage:'التمهيد', strategy:'🌪️ العصف الذهني',
     title:'عصف ذهني ⚡',
     question:'أين قابلتِ الذكاء الاصطناعي اليوم قبل أن تصلي للمدرسة؟ 🤔',
     seconds:120,
@@ -820,7 +944,7 @@ const SLIDES = [
     notes:'اكتبي أفكار الطالبات في الخانة واضغطي Enter لتظهر كفقاعات. زر 💡 يضيف أفكارًا مقترحة. اضغطي على أي فقاعة لحذفها.' },
 
   /* 8) تعريف الذكاء الاصطناعي */
-  { type:'definition', anim:'fade', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
+  { id:'definition', type:'definition', anim:'fade', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
     title:'ما هو <span class="hl">الذكاء الاصطناعي</span>؟ 🤖',
     parts:['الذكاء الاصطناعي هو قدرة نظام', {w:'جهاز الحاسب'}, 'على', {w:'تقليد'}, 'أفعال البشر، مثل', {w:'التعلّم'}, 'و', {w:'حل المشكلات'}, '.'],
     pairs:[
@@ -832,18 +956,18 @@ const SLIDES = [
     notes:'اطلبي من الطالبات تخمين الكلمة قبل كشف كل فراغ. ثم اضغطي البطاقات: كل قدرة بشرية لها تطبيق ذكاء اصطناعي يقلّدها.' },
 
   /* 9) مقارنة: البرنامج العادي مقابل تعلّم الآلة */
-  { type:'compare', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'⚖️ قارني واستنتجي',
+  { id:'compare', type:'compare', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'⚖️ قارني واستنتجي',
     title:'ما الفرق بين <span class="hl">البرنامج العادي</span> و<span class="hl">تعلّم الآلة</span>؟',
     def:'📘 <b>تعلّم الآلة (Machine Learning):</b> إنشاء خوارزميات تمكّن الآلات من التعلّم والقيام بتنبؤات أو قرارات بناءً على البيانات، ومواصلة التحسّن من تلقاء نفسها بناءً على الخبرة.',
     notes:'ارسمي الفكرة بصوتك: في البرنامج العادي (مثل الآلة الحاسبة) يكتب المبرمج كل القواعد مسبقًا. في تعلّم الآلة نعطيها أمثلة مع إجاباتها، و«هي» تستنتج القاعدة.' },
 
   /* 10) مختبر: علّمي الآلة */
-  { type:'mllab', anim:'zoom', stage:'الممارسة الموجهة (نحن نفعل)', strategy:'🧪 التعلّم بالتجربة',
+  { id:'mllab', type:'mllab', anim:'zoom', stage:'الممارسة الموجهة (نحن نفعل)', strategy:'🧪 التعلّم بالتجربة',
     title:'مختبر: <span class="hl">علّمي الآلة</span> كشف الرسائل الاحتيالية 🧪',
     notes:'1) اختاري «احتيالية» وانقري عدة نقاط أعلى اليمين، ثم «سليمة» وانقري أسفل اليسار. 2) لاحظي تلوّن المساحة: هذه هي «القاعدة» التي تعلّمتها الآلة دون أن يكتبها أحد! 3) اختاري «اختبري» وانقري في أي مكان لترى التنبؤ. 4) زر «بيانات خاطئة» يوضح أن البيانات الخاطئة تفسد النتائج (ملاحظة الكتاب عن التشخيص الطبي).' },
 
   /* 11) سؤال تقييم فوري */
-  { type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'✅ اختاري الإجابة الصحيحة',
+  { id:'mcq-ml', type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'✅ اختاري الإجابة الصحيحة',
     title:'تحقّق سريع ⚡',
     q:'ما الذي يميّز تعلّم الآلة عن البرامج العادية؟',
     options:[ {i:'⚡',t:'أسرع في الحساب فقط'}, {i:'🧠',t:'تتعلّم من البيانات وتتحسّن بالخبرة'}, {i:'📝',t:'يكتب المبرمج لها كل القواعد'}, {i:'🔌',t:'لا تحتاج إلى أي بيانات'} ],
@@ -851,26 +975,26 @@ const SLIDES = [
     explain:'الآلة تستنتج القاعدة من الأمثلة، وتتحسّن كلما زادت خبرتها.' },
 
   /* 11.5) فيديو: كيف يتعلّم الذكاء الاصطناعي؟ */
-  { type:'video', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🎬 شاهدي وراقبي',
+  { id:'video', type:'video', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🎬 شاهدي وراقبي',
     title:'كيف <span class="hl">يتعلّم</span> الذكاء الاصطناعي؟ 🎬',
     src:'how-ai-learns-voice.mp4',
     watch:[ 'من أين تتعلّم الآلة؟', 'ماذا يحدث عندما تخطئ؟', 'ما الخطوات التي مرّت بها حتى تعلّمت؟' ],
     notes:'اقرئي أسئلة «راقبي» قبل التشغيل. مدة الفيديو 3 دقائق تقريبًا، وعند انتهائه ينتقل العرض تلقائيًا إلى شرح خطوات تعلّم الآلة لتجيب الطالبات عن الأسئلة أثناء الشرح.' },
 
   /* 12) شرح خطوات تعلّم الآلة (قبل لعبة الترتيب) */
-  { type:'steps', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🪜 خطوة بخطوة',
+  { id:'steps', type:'steps', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🪜 خطوة بخطوة',
     title:'كيف تتعلّم الآلة؟ <span class="hl">الخطوات الأساسية</span> 🪜',
     steps: ML_STEPS,
     notes:'اشرحي خطوة واحدة في كل مرة بزر «الخطوة التالية» (أو بالضغط على الخطوة نفسها). اربطي كل خطوة بمثال الرسائل الاحتيالية الذي جرّبنه في المختبر، ثم بتشبيه الطبخ. اسألي قبل كل خطوة: «ماذا تتوقعن أن نفعل الآن؟»' },
 
   /* 13) ترتيب خطوات تعلّم الآلة (تطبيق بعد الشرح) */
-  { type:'order', anim:'slide', stage:'الممارسة الموجهة (نحن نفعل)', strategy:'🧩 التعلّم التعاوني',
+  { id:'order', type:'order', anim:'slide', stage:'الممارسة الموجهة (نحن نفعل)', strategy:'🧩 التعلّم التعاوني',
     title:'الآن دوركِ: رتّبي <span class="hl">خطوات تعلّم الآلة</span> 🧩',
     steps: ML_STEPS,
     notes:'بعد الشرح: تتناوب طالبات المجموعات على اختيار الخطوة التالية. الاختيار الخاطئ يهتز ولا يُقبل. التشبيه بالطبخ يظهر تحت كل خطوة.' },
 
   /* 14) تطبيقات الذكاء الاصطناعي (بطاقات قابلة للقلب) */
-  { type:'flips', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
+  { id:'apps', type:'flips', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
     title:'الذكاء الاصطناعي حولكِ في كل مكان 🌍 <small class="muted" style="font-size:30px">(اضغطي البطاقة)</small>',
     cards:[
       {i:'🌐', t:'الترجمة بمساعدة الحاسب', c:'#7C3AED', b:'Google Translate وMicrosoft Translator وترجمة Teams الفورية.<br>⚠️ تخطئ مع الكلمات متعددة المعاني والعامية.'},
@@ -887,7 +1011,7 @@ const SLIDES = [
     notes:'وزّعي البطاقات: كل طالبة تختار رقمًا وتقلب بطاقة وتقرؤها بصوتها، ثم تذكر مثالًا من حياتها.' },
 
   /* 15) التعرّف على الكلام + تحدي الترجمة */
-  { type:'speech', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🔬 جرّبي بنفسك',
+  { id:'speech', type:'speech', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🔬 جرّبي بنفسك',
     title:'جرّبي <span class="hl">ذكاءً اصطناعيًا حقيقيًا</span> الآن 🎙️',
     sample:'صباح الخير',
     word:'عين',
@@ -896,7 +1020,7 @@ const SLIDES = [
     notes:'زر الميكروفون يعمل في متصفح Chrome مع الإنترنت (يطلب إذن الميكروفون). إن لم يعمل استخدمي زر «محاكاة». اطلبي من طالبة أن تقول «صباح الخير».' },
 
   /* 16) سؤال */
-  { type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'❓ استراتيجية الأسئلة',
+  { id:'mcq-glasses', type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'❓ استراتيجية الأسئلة',
     title:'سؤال 🎯',
     q:'النظارات الذكية الناطقة التي تصف للمكفوفين ما حولهم تعتمد على تقنية:',
     options:[ {i:'🎙️',t:'التعرّف على الكلام'}, {i:'🌐',t:'الترجمة الآلية'}, {i:'👁️',t:'التعرّف على الصور'}, {i:'🎮',t:'الألعاب الذكية'} ],
@@ -904,7 +1028,7 @@ const SLIDES = [
     explain:'تتعرّف على محتويات الصور وتصفها صوتيًا لمساعدة المكفوفين وضعاف البصر.' },
 
   /* 17) أمثلة على الذكاء الاصطناعي: المساعد الشخصي الافتراضي */
-  { type:'assistant', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🔬 جرّبي بنفسك',
+  { id:'assistant', type:'assistant', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🔬 جرّبي بنفسك',
     title:'أمثلة على الذكاء الاصطناعي: <span class="hl">المساعد الافتراضي</span> 💬',
     def:'💬 <b>المساعد الشخصي الافتراضي:</b> تطبيق برمجي يحاكي محادثة بين الشخص وجهاز الحاسب أو الهاتف، ويقدّم معلومات <b>صوتية أو نصية</b> عن قائمة المهام أو التقويم أو البحث عن معلومة.',
     brands:['Siri','Microsoft Copilot','Google Assistant','Alexa'],
@@ -922,7 +1046,7 @@ const SLIDES = [
     notes:'اضغطي على سؤال جاهز فيرد المساعد كتابةً (بدون صوت). زر الميكروفون يستمع فعليًا في Chrome. اسألي: «ما الفرق بين المساعد الافتراضي والبحث العادي في جوجل؟» (المحادثة الطبيعية والصوت).' },
 
   /* 18) القيادة الذاتية */
-  { type:'drive', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🔮 ماذا تتوقعين؟',
+  { id:'drive', type:'drive', anim:'slide', stage:'الشرح (أنا أفعل)', strategy:'🔮 ماذا تتوقعين؟',
     title:'من يقود السيارة؟ 🚗 <span class="hl">مستويات القيادة الذاتية</span>',
     levels:[
       {n:'مستوى التحكم المنخفض', c:'#10B981', who:'👩 السائقة تقود', d:'تساعد السيارة في <b>تنشيط المكابح والتوجيه والتسارع</b> فقط.'},
@@ -933,7 +1057,7 @@ const SLIDES = [
     notes:'اسألي السؤال أولًا ودعيهن يتوقعن قبل الضغط على المستويات.' },
 
   /* 19) سؤال */
-  { type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'✅ اختاري الإجابة الصحيحة',
+  { id:'mcq-drive', type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'✅ اختاري الإجابة الصحيحة',
     title:'سؤال 🚗',
     q:'سيارة تقود نفسها على الطريق السريع فقط وتحت ظروف معينة.. في أي مستوى؟',
     options:[ {i:'🟢',t:'مستوى التحكم المنخفض'}, {i:'🟡',t:'مستوى التحكم المشروط'}, {i:'🔴',t:'مستوى التحكم العالي'}, {i:'⚪',t:'ليست قيادة ذاتية'} ],
@@ -941,7 +1065,7 @@ const SLIDES = [
     explain:'المستوى المشروط: قيادة ذاتية لمسافات طويلة تحت شروط معينة.' },
 
   /* 20) الروبوت */
-  { type:'robot', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
+  { id:'robot', type:'robot', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
     title:'الروبوت: من <span class="hl">ذراع المصنع</span> إلى <span class="hl">الروبوت الذكي</span> 🦾',
     def:'🤖 <b>روبوتات الذكاء الاصطناعي</b> مستقلة تمامًا وتتفاعل مع بيئتها بشكل كامل، وتختلف تمامًا عن <b>الأذرع الروبوتية الآلية</b> التي تؤدي مهامًا متكررة في خطوط التجميع، كمصانع السيارات.',
     parts:[
@@ -954,7 +1078,7 @@ const SLIDES = [
     notes:'1) ركّبي الروبوت بالضغط على المكونات (من الكتاب). 2) شغّلي «اختبار العائق» واسألي قبل التشغيل: «ماذا تتوقعن أن يفعل كل منهما؟». الفكرة: ذراع المصنع تكرر ما بُرمجت عليه، والروبوت الذكي يرى ويتصرف. الكتاب يذكر أن الروبوتات تطورت أبعد من أجهزة بسيطة كالمكنسة الروبوتية.' },
 
   /* 21) فكري – زاوجي – شاركي */
-  { type:'tps', anim:'zoom', stage:'الممارسة المستقلة (أنتِ تفعلين)', strategy:'👭 فكّري – زاوجي – شاركي',
+  { id:'tps', type:'tps', anim:'zoom', stage:'الممارسة المستقلة (أنتِ تفعلين)', strategy:'👭 فكّري – زاوجي – شاركي',
     title:'فكّري – زاوجي – شاركي 💭',
     question:'الروبوت: صديق يساعد البشر 🤝 أم منافس يأخذ وظائفهم؟ 🤖',
     phases:[
@@ -965,7 +1089,7 @@ const SLIDES = [
     notes:'اضغطي على كل مرحلة ليبدأ مؤقتها. بعد المشاركة انتقلي للشريحة التالية لعرض رأي الكتاب.' },
 
   /* 22) جدول تأثيرات الروبوتات */
-  { type:'effects', anim:'fade', stage:'الشرح (أنا أفعل)', strategy:'⚖️ قارني واستنتجي',
+  { id:'effects', type:'effects', anim:'fade', stage:'الشرح (أنا أفعل)', strategy:'⚖️ قارني واستنتجي',
     title:'التأثيرات المختلفة للروبوتات 🦾',
     rows:[
       {h:'👥 اجتماعية', pos:'أداء المهام المتكررة أو الصعبة أو الخطيرة، مثل تفكيك القنابل والألغام.', neg:'الاستغناء عن أعداد كبيرة من القوى العاملة وزيادة البطالة.'},
@@ -974,7 +1098,7 @@ const SLIDES = [
     ] },
 
   /* 23) الطائرة المسيّرة */
-  { type:'drone', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
+  { id:'drone', type:'drone', anim:'zoom', stage:'الشرح (أنا أفعل)', strategy:'🔍 لاحظي واكتشفي',
     title:'ما هي <span class="hl">الطائرة المسيّرة</span>؟ 🚁',
     def:'🚁 <b>الطائرة المسيّرة (بدون طيار):</b> روبوت مخصّص قادر على الطيران والتقاط الصور أو الفيديو، وتُسمّى <b>المركبة الجوية غير المأهولة (UAV)</b>.',
     parts:[
@@ -998,7 +1122,7 @@ const SLIDES = [
     notes:'اسألي سؤال المراوح الأربع أولًا. ثم اضغطي النقاط المرقّمة على الصورة واحدة تلو الأخرى، واطلبي من الطالبات تخمين اسم الجزء قبل الكشف. بعدها اكشفي بطاقات اليمين. اربطي: الكاميرا = تصوير، والمستشعرات = توازن ومسار دقيق، والبطارية = هبوط آمن عند النفاد (من الكتاب).' },
 
   /* 24) سؤال عن المسيّرة */
-  { type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'✅ اختاري الإجابة الصحيحة',
+  { id:'mcq-drone', type:'mcq', anim:'zoom', stage:'التقييم الفوري', strategy:'✅ اختاري الإجابة الصحيحة',
     title:'تحقّق سريع 🚁',
     q:'تُسمّى الطائرة المسيّرة أيضًا:',
     options:[ {i:'🛰️',t:'القمر الصناعي'}, {i:'🚁',t:'المركبة الجوية غير المأهولة (UAV)'}, {i:'✈️',t:'الطائرة التجارية'}, {i:'🎈',t:'المنطاد الآلي'} ],
@@ -1006,7 +1130,7 @@ const SLIDES = [
     explain:'UAV = Unmanned Aerial Vehicle، وغالبًا تعتمد على مروحية رباعية (كوادكوبتر).' },
 
   /* 25) التعلّم التعاوني: الطائرات المسيّرة */
-  { type:'groups', anim:'zoom', stage:'الممارسة المستقلة (أنتِ تفعلين)', strategy:'🤝 التعلّم التعاوني',
+  { id:'groups', type:'groups', anim:'zoom', stage:'الممارسة المستقلة (أنتِ تفعلين)', strategy:'🤝 التعلّم التعاوني',
     title:'5 مجموعات.. 5 مجالات للطائرة المسيّرة 🚁',
     task:'🎯 كل مجموعة: اذكري <b>استخدامًا</b> للطائرة المسيّرة في مجالكِ + <b>مشكلة أمن أو خصوصية</b> قد تنشأ عنه.',
     seconds:180,
@@ -1021,7 +1145,7 @@ const SLIDES = [
     notes:'وزّعي المجالات على المجموعات وشغّلي المؤقت. بعد انتهاء الوقت اضغطي بطاقة كل مجموعة لعرض إجابة الكتاب ومقارنتها بإجابتهن.' },
 
   /* 26) ربط بالقيم: الدين والمجتمع والوطن (المادة 34) */
-  { type:'values', anim:'zoom', stage:'ربط بالقيم والهوية الوطنية', strategy:'💬 الحوار والمناقشة',
+  { id:'values', type:'values', anim:'zoom', stage:'ربط بالقيم والهوية الوطنية', strategy:'💬 الحوار والمناقشة',
     title:'الذكاء الاصطناعي في خدمة <span class="hl">ديني ومجتمعي ووطني</span> 🇸🇦',
     article:{ label:'📜 النظام الأساسي للحكم — المادة 34',
               text:'الدفاع عن العقيدة الإسلامية، والمجتمع، والوطن واجب على كل مواطن، ويبين النظام أحكام الخدمة العسكرية.' },
@@ -1048,7 +1172,7 @@ const SLIDES = [
     notes:'اقرئي نص المادة 34 مع الطالبات، ثم اسألي: «كيف أدافع عن ديني ومجتمعي ووطني وأنا طالبة؟». ثم ناقشي النقاط الظاهرة في كل بطاقة. معلومة إضافية: الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا) جهة وطنية تقود الذكاء الاصطناعي ضمن رؤية 2030 — «قد تكونين إحدى مبتكراتها يومًا!».' },
 
   /* 27) جهود المملكة العربية السعودية في الذكاء الاصطناعي */
-  { type:'ksa', anim:'zoom', stage:'ربط بالقيم والهوية الوطنية', strategy:'🇸🇦 هويتي الوطنية',
+  { id:'ksa', type:'ksa', anim:'zoom', stage:'ربط بالقيم والهوية الوطنية', strategy:'🇸🇦 هويتي الوطنية',
     title:'جهود <span class="hl">المملكة العربية السعودية</span> في الذكاء الاصطناعي 🇸🇦',
     banner:'🌟 ضمن <b>رؤية السعودية 2030</b>.. يستثمر وطنكِ في البيانات والذكاء الاصطناعي ليكون من رواد العالم',
     cards:[
@@ -1063,7 +1187,7 @@ const SLIDES = [
     notes:'المعلومات ظاهرة مباشرة. نشاط سريع: «لو عملتِ في سدايا، ما أول تطبيق ذكي ستطوّرينه لخدمة وطنكِ؟».' },
 
   /* 28) موقف وطني */
-  { type:'mcq', anim:'zoom', stage:'ربط بالقيم والهوية الوطنية', strategy:'🛡️ موقف وقرار',
+  { id:'mcq-fake', type:'mcq', anim:'zoom', stage:'ربط بالقيم والهوية الوطنية', strategy:'🛡️ موقف وقرار',
     title:'موقف: ماذا تفعلين؟ 🇸🇦',
     q:'وصلكِ مقطع مُفبرَك بالذكاء الاصطناعي يسيء لوطنكِ ويبدو حقيقيًا جدًا.. ماذا تفعلين؟',
     options:[ {i:'📤',t:'أعيد نشره ليعرف الجميع'}, {i:'💬',t:'أعلّق عليه وأردّ بقوة'}, {i:'🛡️',t:'لا أنشره، وأتحقق من المصادر الرسمية وأبلّغ عنه'}, {i:'📥',t:'أحتفظ به وأرسله لصديقاتي فقط'} ],
@@ -1072,7 +1196,7 @@ const SLIDES = [
     notes:'ناقشي: لماذا لا يكفي «الرد بقوة»؟ (لأن التفاعل ينشر المقطع أكثر). اربطي بالمادة 34: الدفاع عن المجتمع والوطن يشمل الوعي الرقمي.' },
 
   /* 29) سؤال */
-  { type:'mcq', anim:'zoom', stage:'التقويم التكويني', strategy:'❓ استراتيجية الأسئلة',
+  { id:'mcq-assist', type:'mcq', anim:'zoom', stage:'التقويم التكويني', strategy:'❓ استراتيجية الأسئلة',
     title:'سؤال 💬',
     q:'Siri و Alexa و Google Assistant أمثلة على:',
     options:[ {i:'🦾',t:'روبوتات المصانع'}, {i:'💬',t:'المساعدات الشخصية الافتراضية'}, {i:'🚁',t:'الطائرات المسيّرة'}, {i:'🩺',t:'التشخيص الطبي'} ],
@@ -1080,7 +1204,7 @@ const SLIDES = [
     explain:'تطبيقات برمجية تحاكي محادثة بين الشخص والجهاز، وتقدم معلومات صوتية أو نصية.' },
 
   /* 30) سؤال */
-  { type:'mcq', anim:'zoom', stage:'التقويم التكويني', strategy:'❓ استراتيجية الأسئلة',
+  { id:'mcq-speech', type:'mcq', anim:'zoom', stage:'التقويم التكويني', strategy:'❓ استراتيجية الأسئلة',
     title:'سؤال 🎙️',
     q:'ما التقنية التي تحوّل الموجة الصوتية لجملة «صباح الخير» إلى نص مكتوب؟',
     options:[ {i:'🎙️',t:'التعرّف على الكلام'}, {i:'👁️',t:'التعرّف على الصور'}, {i:'🌐',t:'الترجمة الآلية'}, {i:'🚗',t:'القيادة الذاتية'} ],
@@ -1088,7 +1212,7 @@ const SLIDES = [
     explain:'المدخلات: موجة صوتية ← شبكة عصبية ← المخرجات: نص مكتوب.' },
 
   /* 31) صح أم خطأ (تدريب 3 من الكتاب) */
-  { type:'tf', anim:'slide', stage:'التقويم التكويني', strategy:'✔️✖️ صح أم خطأ',
+  { id:'tf', type:'tf', anim:'slide', stage:'التقويم التكويني', strategy:'✔️✖️ صح أم خطأ',
     title:'صح أم خطأ؟ 🤔 <small class="muted" style="font-size:30px">(1 = صحيحة ، 2 = خطأ)</small>',
     items:[
       {t:'يمكن لنظام تعلّم الآلة أن يلعب دورًا مهمًا في تحسين مهام الآلات وأجهزة الحاسب.', a:true},
@@ -1101,7 +1225,7 @@ const SLIDES = [
     ] },
 
   /* 32) تحدي الدقيقة */
-  { type:'challenge', anim:'zoom', stage:'التقويم التكويني', strategy:'⏱️ تحدي الدقيقة',
+  { id:'challenge', type:'challenge', anim:'zoom', stage:'التقويم التكويني', strategy:'⏱️ تحدي الدقيقة',
     title:'تحدّي الدقيقة: ذكاء اصطناعي 🤖 أم برنامج عادي ⚙️؟',
     seconds:60,
     items:[
@@ -1119,7 +1243,7 @@ const SLIDES = [
     notes:'قسّمي الصف لفريقين يتناوبان. 1 = ذكاء اصطناعي، 2 = برنامج عادي. السر: هل البرنامج «يتعلّم»؟ أم ينفّذ قاعدة ثابتة كتبها المبرمج؟' },
 
   /* 33) سؤال مهارات التفكير العليا */
-  { type:'hots', anim:'zoom', stage:'التقويم التكويني', strategy:'🧠 مهارات التفكير العليا',
+  { id:'hots', type:'hots', anim:'zoom', stage:'التقويم التكويني', strategy:'🧠 مهارات التفكير العليا',
     title:'سؤال <span class="hl">مهارات التفكير العليا</span> 🧠',
     scenario:'🏥 <b>موقف:</b> مستشفى يريد استخدام الذكاء الاصطناعي لتشخيص الأمراض من صور الأشعة، لكن بيانات التدريب جُمعت من <b>مستشفى واحد فقط</b> وفيها <b>أخطاء في التصنيف</b>.',
     seconds:180,
@@ -1134,7 +1258,7 @@ const SLIDES = [
     notes:'تعمل كل مجموعة على الأسئلة الثلاثة خلال 3 دقائق (حلّلي = تحليل، قيّمي = تقويم، ابتكري = إبداع حسب تصنيف بلوم). تعرض مجموعة إجابتها لكل سؤال، ثم اضغطي «إظهار الإجابات النموذجية» للمقارنة. تقبّلي أي إجابة مبرّرة منطقيًا في سؤالي «قيّمي» و«ابتكري».' },
 
   /* 34) الغلق: خريطة المراجعة */
-  { type:'summary', anim:'zoom', stage:'الغلق والتلخيص', strategy:'🗺️ خريطة مفاهيم',
+  { id:'summary', type:'summary', anim:'zoom', stage:'الغلق والتلخيص', strategy:'🗺️ خريطة مفاهيم',
     title:'لنلخّص ما تعلّمناه 🗺️',
     center:'الذكاء<br>الاصطناعي',
     nodes:[
@@ -1149,7 +1273,7 @@ const SLIDES = [
     notes:'استخدمي «اختيار عشوائي» لتلخّص طالبة كل فرع قبل كشفه.' },
 
   /* 35) تذكرة الخروج + التقييم الذاتي */
-  { type:'exit', anim:'fade', stage:'التقويم الختامي', strategy:'🎫 تذكرة الخروج',
+  { id:'exit', type:'exit', anim:'fade', stage:'التقويم الختامي', strategy:'🎫 تذكرة الخروج',
     title:'تذكرة الخروج 🎫 (3 – 2 – 1)',
     cards:[
       {n:'3', c:'#7C3AED', t:'تطبيقات للذكاء الاصطناعي تستخدمينها'},
@@ -1160,7 +1284,7 @@ const SLIDES = [
     notes:'اطلبي من الطالبات رفع أيديهن لكل مستوى فهم، واضغطي الزر لعدّهن (التقييم الذاتي).' },
 
   /* 36) الختام */
-  { type:'closing', anim:'zoom', stage:'الواجب والختام', strategy:'🚀 تحفيز',
+  { id:'closing', type:'closing', anim:'zoom', stage:'الواجب والختام', strategy:'🚀 تحفيز',
     title:'',
     homework:[
       '📖 حل <b>تدريب 1</b> و<b>تدريب 2</b> صفحة 133.',
@@ -1172,6 +1296,89 @@ const SLIDES = [
     motto:'أنتِ لا تستخدمين الذكاء الاصطناعي فقط..<br>أنتِ من سيصنعه لخدمة دينكِ ووطنكِ!',
     thanks:'شكرًا لكنّ يا مبدعات 💜' }
 ];
+
+
+/* ==========================================================================
+   📚 الربط بمكتبة الدروس + 📝 التحضير الافتراضي لكل شريحة
+   (التحضير يُعدَّل أثناء العرض من زر 📝 أو حرف P، ويُحفظ لكل شريحة)
+   ========================================================================== */
+const LESSON_ID = 'dt-3';   // رقم الدرس في مكتبة الدروس (لربط التحضير وتتبّع التقدم)
+LESSON.lessonNo = 'الدرس الثالث';
+LESSON.unit     = 'الذكاء الاصطناعي';
+LESSON.print = {
+  concepts:'الذكاء الاصطناعي، تعلّم الآلة، خطوات تعلّم الآلة، التعرّف على الكلام، المساعد الافتراضي، القيادة الذاتية، الروبوت، الطائرة المسيّرة (UAV)',
+  tools:'العرض التفاعلي، السبورة الذكية، الكتاب المدرسي، فيديو تعليمي، الميكروفون (اختياري)',
+  homework:'حل تدريب 1 وتدريب 2 صفحة 133 + البحث عن تطبيق ذكاء اصطناعي سعودي + اقتراح فكرة تطبيق ذكاء اصطناعي يخدم ضيوف الرحمن أو يحمي الوطن.'
+};
+const GOALS = {
+  g0:'التهيئة والتمهيد',
+  g1:'تعريف الذكاء الاصطناعي بأسلوبها.',
+  g2:'التمييز بين البرامج العادية وتعلّم الآلة.',
+  g3:'ترتيب الخطوات الأساسية لعملية تعلّم الآلة.',
+  g4:'ذكر تطبيقات الذكاء الاصطناعي في الحياة اليومية.',
+  g5:'مناقشة التأثيرات الإيجابية والسلبية للروبوتات والطائرات المسيّرة.',
+  g6:'توظيف الذكاء الاصطناعي بمسؤولية لخدمة الدين والمجتمع والدفاع عن الوطن.',
+  gz:'التقويم والغلق'
+};
+const PREP = {
+  'title':      { min:1, goal:'g0', st:'الترحيب والتهيئة', t:'ترحّب المعلمة بالطالبات وتعرض عنوان الدرس، وتشغّل فيديو الترحيب بزر «استمعي».', s:'تشاهد الطالبات الفيديو وتتهيأن للدرس.', ev:'—' },
+  'review':     { min:2, goal:'g0', st:'صنّفي وتذكّري (مراجعة)', t:'تراجع المعلمة درسي تطبيقات الهواتف الذكية وبنائها: تكشف بطاقات المفاهيم (برامج النظام والتطبيقية، UI و UX، MIT App Inventor، المتغير)، ثم تعرض خطوات بناء «مِسبحتي» للتصنيف.', s:'تذكر الطالبات مثالًا لكل مفهوم، وتصنّفن الخطوات إلى المصمم Designer أو محرر اللبنات Blocks.', ev:'صحة التصنيف والأمثلة.' },
+  'bridge':     { min:1, goal:'g0', st:'ماذا تتوقعين؟ (موقف مشكل)', t:'تعرض المعلمة موقف اجتماع Teams مع معلمة بريطانية، وتفعّل الترجمة المباشرة، وتسأل: من الذي ترجم؟', s:'تتوقع الطالبات الحل وتستنتج أن الذكاء الاصطناعي هو السر.', ev:'اذكري مثالًا آخر لآلة «تفهم» دون إنسان.' },
+  'goals':      { min:1, goal:'g0', st:'عرض نواتج التعلم', t:'تقرأ المعلمة الأهداف وتنبّه إلى العودة إليها والضغط عليها عند تحقّقها في نهاية الحصة.', s:'تقرأ إحدى الطالبات الأهداف.', ev:'—' },
+  'brainstorm': { min:1, goal:'g1', st:'العصف الذهني', t:'تسأل المعلمة: ماذا يخطر ببالكِ عند سماع «ذكاء اصطناعي»؟ وتكتب أفكار الطالبات كفقاعات.', s:'تشارك الطالبات بأفكارهن وخبراتهن السابقة.', ev:'تنوّع الأفكار وارتباطها بالموضوع.' },
+  'definition': { min:2, goal:'g1', st:'لاحظي واكتشفي (أكملي الفراغ)', t:'تطلب المعلمة تخمين الكلمات قبل كشف فراغات التعريف، ثم تضغط بطاقات القدرات البشرية وما يقابلها من تطبيقات.', s:'تخمّن الطالبات الكلمات وتصوغ التعريف بأسلوبهن.', ev:'عرّفي الذكاء الاصطناعي بأسلوبكِ.' },
+  'compare':    { min:1, goal:'g2', st:'قارني واستنتجي', t:'توضّح المعلمة أن المبرمج يكتب القواعد في البرنامج العادي، بينما تستنتج الآلة القاعدة من الأمثلة في تعلّم الآلة.', s:'تقارن الطالبات بين النوعين وتستنتجن الفرق.', ev:'ما الفرق بين البرنامج العادي وتعلّم الآلة؟' },
+  'mllab':      { min:2, goal:'g2', st:'التعلّم بالتجربة (مختبر)', t:'تطلب المعلمة إضافة أمثلة «احتيالية» و«سليمة» ثم اختبار رسالة جديدة، وتلفت النظر إلى أن الآلة رسمت القاعدة بنفسها.', s:'تدرّب الطالبات الآلة بالأمثلة وتختبرنها.', ev:'لماذا صنّفت الآلة الرسالة الجديدة بهذا الشكل؟' },
+  'mcq-ml':     { min:1, goal:'g2', st:'تقييم فوري', t:'تختار المعلمة طالبة بالقرعة للإجابة وتطلب التبرير.', s:'تجيب الطالبة وتبرّر.', ev:'صحة الإجابة.' },
+  'video':      { min:3, goal:'g3', st:'شاهدي وراقبي', t:'تقرأ المعلمة أسئلة «راقبي» قبل تشغيل الفيديو، ثم تشغّله.', s:'تشاهد الطالبات الفيديو وتبحثن عن إجابات الأسئلة.', ev:'إجابات أسئلة «راقبي».' },
+  'steps':      { min:2, goal:'g3', st:'خطوة بخطوة (النمذجة)', t:'تشرح المعلمة خطوات تعلّم الآلة خطوة خطوة، وتربط كل خطوة بمثال الرسائل الاحتيالية وبتشبيه الطبخ.', s:'تتوقع الطالبات الخطوة التالية قبل كشفها.', ev:'ما الخطوة التي تأتي بعد المعالجة المسبقة؟' },
+  'order':      { min:1, goal:'g3', st:'التعلّم التعاوني (ترتيب)', t:'تتيح المعلمة لطالبات المجموعات التناوب على اختيار الخطوة التالية.', s:'ترتّب الطالبات خطوات تعلّم الآلة.', ev:'صحة الترتيب.' },
+  'apps':       { min:1, goal:'g4', st:'لاحظي واكتشفي (بطاقات)', t:'توزّع المعلمة البطاقات: كل طالبة تختار رقمًا وتقلب بطاقة وتقرؤها.', s:'تقرأ الطالبات البطاقات وتذكرن مثالًا من حياتهن.', ev:'اذكري تطبيقًا للذكاء الاصطناعي تستخدمينه يوميًا.' },
+  'speech':     { min:1, goal:'g4', st:'جرّبي بنفسك', t:'تجرّب المعلمة التعرّف على الكلام بالميكروفون (أو زر المحاكاة) وتطلب من طالبة نطق جملة.', s:'تجرّب الطالبات التقنية وتلاحظن تحويل الصوت إلى نص.', ev:'كيف تحوّلت الجملة المنطوقة إلى نص؟' },
+  'mcq-glasses':{ min:1, goal:'g4', st:'استراتيجية الأسئلة', t:'تطرح المعلمة السؤال وتختار طالبة بالقرعة.', s:'تجيب الطالبة.', ev:'صحة الإجابة.' },
+  'assistant':  { min:1, goal:'g4', st:'جرّبي بنفسك', t:'تضغط المعلمة الأسئلة الجاهزة ليرد المساعد، وتسأل: ما الفرق بين المساعد الافتراضي والبحث العادي؟', s:'تتفاعل الطالبات مع المساعد وتقارنّ.', ev:'اذكري مثالين على المساعد الافتراضي.' },
+  'drive':      { min:1, goal:'g4', st:'ماذا تتوقعين؟', t:'تسأل المعلمة «من يقود السيارة؟» وتترك الطالبات يتوقعن قبل كشف مستويات القيادة الذاتية.', s:'تتوقع الطالبات وتميّزن بين المستويات.', ev:'ما الفرق بين المستوى 3 والمستوى 5؟' },
+  'mcq-drive':  { min:1, goal:'g4', st:'تقييم فوري', t:'تطرح المعلمة السؤال وتختار طالبة بالقرعة.', s:'تجيب الطالبة.', ev:'صحة الإجابة.' },
+  'robot':      { min:1, goal:'g5', st:'لاحظي واكتشفي', t:'تركّب المعلمة الروبوت بالضغط على مكوناته، ثم تشغّل «اختبار العائق» بعد سؤال الطالبات عن توقعاتهن.', s:'تتعرّف الطالبات على مكونات الروبوت وتقارنّ بين ذراع المصنع والروبوت الذكي.', ev:'لماذا توقّف الروبوت الذكي عند العائق؟' },
+  'tps':        { min:2, goal:'g5', st:'فكّري – زاوجي – شاركي', t:'تطرح المعلمة السؤال وتشغّل مؤقت كل مرحلة.', s:'تفكّر الطالبات فرديًا ثم في أزواج ثم تشاركن الصف.', ev:'جودة الأفكار المطروحة.' },
+  'effects':    { min:1, goal:'g5', st:'قارني واستنتجي', t:'تعرض المعلمة جدول التأثيرات الإيجابية والسلبية للروبوتات وتقارنه بإجابات الطالبات.', s:'تقارن الطالبات إجاباتهن بالكتاب.', ev:'اذكري أثرًا إيجابيًا وآخر سلبيًا للروبوتات.' },
+  'drone':      { min:1, goal:'g5', st:'لاحظي واكتشفي', t:'تسأل المعلمة عن المراوح الأربع، ثم تكشف أجزاء الطائرة المسيّرة بالنقاط المرقّمة بعد تخمين الطالبات.', s:'تخمّن الطالبات أسماء الأجزاء ووظائفها.', ev:'ما وظيفة الكاميرا ونظام GPS في المسيّرة؟' },
+  'mcq-drone':  { min:1, goal:'g5', st:'تقييم فوري', t:'تطرح المعلمة السؤال وتختار طالبة بالقرعة.', s:'تجيب الطالبة.', ev:'صحة الإجابة.' },
+  'groups':     { min:3, goal:'g5', st:'التعلّم التعاوني', t:'توزّع المعلمة المجالات الخمسة على المجموعات وتشغّل المؤقت، ثم تكشف إجابة الكتاب لكل مجموعة.', s:'تذكر كل مجموعة استخدامًا للمسيّرة في مجالها ومشكلة أمن أو خصوصية.', ev:'سلم تقدير: صحة الاستخدام، وجاهة المشكلة، التعاون.' },
+  'values':     { min:1, goal:'g6', st:'الحوار والمناقشة', t:'تقرأ المعلمة نص المادة 34 وتسأل: كيف أدافع عن ديني ومجتمعي ووطني وأنا طالبة؟', s:'تناقش الطالبات دور الذكاء الاصطناعي في خدمة الدين والمجتمع والوطن.', ev:'اذكري طريقة لتوظيف الذكاء الاصطناعي لخدمة وطنكِ.' },
+  'ksa':        { min:1, goal:'g6', st:'هويتي الوطنية', t:'تعرض المعلمة جهود المملكة (سدايا وغيرها) وتسأل: لو عملتِ في سدايا ما أول تطبيق ستطوّرينه؟', s:'تقترح الطالبات أفكارًا لتطبيقات تخدم الوطن.', ev:'اذكري جهة سعودية تعنى بالذكاء الاصطناعي.' },
+  'mcq-fake':   { min:1, goal:'g6', st:'موقف وقرار', t:'تعرض المعلمة الموقف وتناقش لماذا لا يكفي «الرد بقوة»، وتربطه بالوعي الرقمي.', s:'تختار الطالبات التصرف الصحيح وتبرّرنه.', ev:'صحة القرار والتبرير.' },
+  'mcq-assist': { min:1, goal:'gz', st:'استراتيجية الأسئلة', t:'تطرح المعلمة السؤال وتختار طالبة بالقرعة.', s:'تجيب الطالبة.', ev:'صحة الإجابة.' },
+  'mcq-speech': { min:1, goal:'gz', st:'استراتيجية الأسئلة', t:'تطرح المعلمة السؤال وتختار طالبة بالقرعة.', s:'تجيب الطالبة.', ev:'صحة الإجابة.' },
+  'tf':         { min:1, goal:'gz', st:'صح أم خطأ', t:'تعرض المعلمة العبارات (تدريب 3 من الكتاب) وتطلب الحكم مع تصحيح الخطأ.', s:'تحكم الطالبات على العبارات وتصحّحن الخاطئة.', ev:'صحة الحكم والتصحيح.' },
+  'challenge':  { min:1, goal:'gz', st:'تحدي الدقيقة', t:'تقسّم المعلمة الصف إلى فريقين يتناوبان: ذكاء اصطناعي أم برنامج عادي؟', s:'تصنّف الطالبات الأمثلة بسرعة.', ev:'عدد الإجابات الصحيحة.' },
+  'hots':       { min:2, goal:'gz', st:'مهارات التفكير العليا', t:'تعمل كل مجموعة على أسئلة حلّلي – قيّمي – ابتكري خلال 3 دقائق، ثم تعرض المعلمة الإجابات النموذجية.', s:'تحلّل الطالبات الموقف وتقيّمنه وتقترحن حلولًا.', ev:'عمق التحليل ومنطقية الحلول.' },
+  'summary':    { min:1, goal:'gz', st:'خريطة مفاهيم', t:'تختار المعلمة طالبة عشوائيًا لتلخيص كل فرع قبل كشفه.', s:'تلخّص الطالبات ما تعلّمنه.', ev:'—' },
+  'exit':       { min:1, goal:'gz', st:'تذكرة الخروج (3-2-1) والتقييم الذاتي', t:'تطلب المعلمة تذكرة الخروج، وتعدّ الطالبات حسب مستوى الفهم، وتعود للأهداف.', s:'تكتب الطالبات تذكرة الخروج وتقيّمن فهمهن.', ev:'تذكرة الخروج + التقييم الذاتي.' },
+  'closing':    { min:1, goal:'gz', st:'الواجب والختام', t:'توضّح المعلمة الواجب وتختم الدرس بالتحفيز.', s:'تدوّن الطالبات الواجب.', ev:'الواجب.' }
+};
+SLIDES.forEach((s,i)=>{ if(!s.id) s.id='s'+(i+1); if(!s.prep && PREP[s.id]) s.prep=PREP[s.id]; });
+
+/* اسم المعلمة والمدرسة والفصل من المكتبة */
+Object.assign(LESSON, Object.assign({ className:'', classId:'_', linked:false, school:'' }, LESSON));
+(function(){
+  let L=null, S=null;
+  try{ L=JSON.parse(localStorage.getItem('reema-lesson')||'null'); }catch(e){}
+  try{ S=JSON.parse(localStorage.getItem('reema-library-v1')||'null'); }catch(e){}
+  if(S&&S.settings){ if(S.settings.teacher) LESSON.teacher='أ. '+S.settings.teacher; if(S.settings.school) LESSON.school=S.settings.school; }
+  // إذا فُتح العرض مباشرة (وليس من زر «ابدئي الدرس») نأخذ الفصل من إعدادات الدرس المحفوظة في المكتبة
+  if((!L || L.lessonId!==LESSON_ID) && S && Array.isArray(S.classes) && S.classes.length){
+    const cfg=(S.lessonCfg||{})[LESSON_ID]||{};
+    const c=S.classes.find(k=>k.id===cfg.classId)||S.classes.find(k=>k.id===(S.ui||{}).classId)||S.classes[0];
+    L={ lessonId:LESSON_ID, classId:c.id, className:c.name, students:(c.students||[]) };
+  }
+  if(!L || L.lessonId!==LESSON_ID) return;
+  LESSON.linked=true;
+  if(L.teacher && L.teacher.trim()!=='أ.') LESSON.teacher=L.teacher;
+  if(L.school) LESSON.school=L.school;
+  LESSON.className=L.className||''; LESSON.classId=L.classId||L.className||'_';
+  if(Array.isArray(L.students) && L.students.length) LESSON.students=L.students.length;   // للاختيار العشوائي
+})();
 
 /* ==========================================================================
    🔧 ما يلي هو محرك العرض — لا حاجة لتعديله
@@ -1351,11 +1558,11 @@ const T = {
     init:(el)=>{ $('.say',el).onclick=()=>playWelcomeVideo(); }
   },
 
-  /* ---------- مراجعة المراقبة والتحكم: تصنيف مفتوح / مغلق ---------- */
+  /* ---------- مراجعة الدرس السابق: بطاقات مفاهيم + تصنيف إلى صندوقين ---------- */
   loopSort:{
     html:s=>`${head(s)}<div class="s-body"><div class="review-grid">
       <div class="col">${conceptsHTML(s)}<div class="task st">${s.task}</div></div>
-      <div class="st"><div class="sim" style="--c:#0E7490">${simHead('🧩 صِلي كل خاصية بنوع نظام التحكم')}
+      <div class="st"><div class="sim" style="--c:#0E7490">${simHead(s.simTitle||'🧩 صِلي كل خاصية بنوع نظام التحكم')}
         <div class="sim-body sort">
           <div class="scard"><span class="scnt"></span><div class="stx"></div></div>
           <div class="bins">${s.bins.map((b,i)=>`<button class="bin" data-b="${i}" style="--c:${b.c}"><div class="bh">${b.i} ${b.t}</div><small>${b.ex}</small><div class="bl"></div></button>`).join('')}</div>
@@ -1368,12 +1575,12 @@ const T = {
       const show=()=>{
         card.style.animation='none'; card.offsetWidth; card.style.animation='';
         if(i>=order.length){
-          card.innerHTML=`<div class="stx">🎉 أحسنتِ! صنّفتِ كل الخصائص<br>${score} / ${order.length} من المحاولة الأولى</div>`;
-          msg.innerHTML='💡 المغلق <b>يراقب ويقارن ويصحّح</b> (تغذية راجعة).. والمفتوح لا.'; celebrate(); return; }
+          card.innerHTML=`<div class="stx">🎉 أحسنتِ! صنّفتِ الكل<br>${score} / ${order.length} من المحاولة الأولى</div>`;
+          msg.innerHTML=s.doneMsg||'💡 المغلق <b>يراقب ويقارن ويصحّح</b> (تغذية راجعة).. والمفتوح لا.'; celebrate(); return; }
         card.innerHTML=`<span class="scnt">${i+1} / ${order.length}</span><div class="stx">${order[i].t}</div>`;
       };
       const start=()=>{ order=shuffle(s.items); i=0; first=true; score=0; $$('.bl',el).forEach(b=>b.innerHTML='');
-        msg.textContent='👆 اضغطي على النظام الذي تنطبق عليه الخاصية'; show(); };
+        msg.textContent=s.startMsg||'👆 اضغطي على الخيار المناسب'; show(); };
       bins.forEach(b=>b.onclick=()=>{
         if(i>=order.length) return;
         const it=order[i];
@@ -1382,7 +1589,7 @@ const T = {
           if(first) score++; Sound.pop(); msg.innerHTML='✅ صحيح!'; i++; first=true; show();
         } else {
           first=false; card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'),500); Sound.wrong();
-          msg.innerHTML='🤔 فكّري: هل توجد <b>مراقبة ومقارنة وتغذية راجعة</b>؟ إن وُجدت فهو مغلق';
+          msg.innerHTML=s.hint||'🤔 فكّري: هل توجد <b>مراقبة ومقارنة وتغذية راجعة</b>؟ إن وُجدت فهو مغلق';
         }
       });
       $('.rst',el).onclick=start;
@@ -1958,12 +2165,10 @@ const Deck = {
         ctx.onLeave.push(()=>{ au.pause(); au.currentTime=0; }); }
       this.els.push(el); this.ctx.push(ctx);
     });
-    const start=parseInt(location.hash.slice(1),10);
-    this.go(isNaN(start)?0:start-1, true);
   },
   go(n, first=false){
     n=Math.max(0, Math.min(this.els.length-1, n));
-    if(n===this.cur) return;
+    if(n===this.cur){ if(!first) saveProgress(); return; }
     const fwd=n>this.cur, old=this.els[this.cur], nu=this.els[n];
     if(old){ this.ctx[this.cur].onLeave.forEach(f=>f()); old.classList.remove('active','enter-fade','enter-zoom','enter-slide','fwd','back');
       old.classList.add('leaving'); setTimeout(()=>old.classList.remove('leaving'),460); }
@@ -1979,6 +2184,8 @@ const Deck = {
     history.replaceState(null,'','#'+(n+1));
     $('#btnPrev').disabled = n===0; $('#btnNext').disabled = n===this.els.length-1;
     this.renderNotes();
+    if(!first) saveProgress();
+    if(document.body.classList.contains('prep-open')) fillPrep();
   },
   next(){ this.go(this.cur+1); },
   prev(){ this.go(this.cur-1); },
@@ -1986,7 +2193,8 @@ const Deck = {
 };
 
 /* ---------- تكبير المسرح ليملأ الشاشة بنسبة 16:9 ---------- */
-function fit(){ const s=Math.min(innerWidth/1920, innerHeight/1080); $('#stage').style.transform=`translate(-50%,-50%) scale(${s})`; }
+function prepWidth(){ return document.body.classList.contains('prep-open') ? Math.min(innerWidth*.36,560) : 0; }
+function fit(){ const aw=innerWidth-prepWidth(), s=Math.min(aw/1920, innerHeight/1080); const st=$('#stage'); st.style.left=(aw/2)+'px'; st.style.transform=`translate(-50%,-50%) scale(${s})`; }
 addEventListener('resize', fit); fit();
 
 /* ---------- فيديو الترحيب: يُفتح في نافذة وعند انتهائه ننتقل للشريحة التالية ---------- */
@@ -2008,9 +2216,14 @@ function closeWelcomeVideo(){ const m=$('#vidModal'); if(!m) return; $('video',m
 
 /* ---------- لوحة المفاتيح ---------- */
 document.addEventListener('keydown', e=>{
-  const typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName);
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
   if(typing){ if(e.key==='Escape') e.target.blur(); return; }   // لا نتدخل أثناء الكتابة
   if(e.ctrlKey||e.metaKey||e.altKey) return;
+  if(document.body.classList.contains('print-mode')) return;
+  if(e.key==='Escape' && (anyOverlay()||document.body.classList.contains('prep-open'))){ $$('.ov.open').forEach(o=>{ if(o.id!=='resume') o.classList.remove('open'); }); togglePrep(false); return; }
+  if(anyOverlay()) return;
+  if(e.code==='KeyP'||e.code==='KeyN'){ e.preventDefault(); togglePrep(); return; }
+  if(e.code==='KeyG'){ e.preventDefault(); openOverview(); return; }
   const vm=$('#vidModal');
   if(vm && vm.classList.contains('show')){   // أثناء عرض الفيديو: لا تنقّل بين الشرائح
     if(e.key==='Escape') closeWelcomeVideo();
@@ -2025,7 +2238,6 @@ document.addEventListener('keydown', e=>{
   else if(k==='End'){ e.preventDefault(); Deck.go(Deck.els.length-1); }
   else if(k==='ت'||e.code==='KeyJ'){ e.preventDefault(); clap(); }
   else if(e.code==='KeyF'){ toggleFull(); }
-  else if(e.code==='KeyN'){ $('#notes').classList.toggle('show'); }
   else { const c=Deck.ctx[Deck.cur]; if(c && c.keys && c.keys(k)) e.preventDefault(); }
 });
 
@@ -2033,7 +2245,9 @@ document.addEventListener('keydown', e=>{
 $('#btnNext').onclick=()=>Deck.next();
 $('#btnPrev').onclick=()=>Deck.prev();
 $('#btnClap').onclick=()=>clap();
-$('#btnNotes').onclick=()=>$('#notes').classList.toggle('show');
+$('#btnNotes').onclick=()=>togglePrep();
+$('#btnMap').onclick=()=>openOverview();
+$('#btnHome').addEventListener('click',()=>saveProgress());
 $('#btnFull').onclick=()=>toggleFull();
 function toggleFull(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{}); else document.exitFullscreen?.(); }
 // منع زر المسافة من «ضغط» آخر زر تم النقر عليه
@@ -2042,12 +2256,12 @@ document.addEventListener('click', e=>{ const b=e.target.closest('button'); if(b
 /* ---------- إخفاء شريط التحكم تلقائيًا عند عدم تحريك الماوس ---------- */
 let idleT;
 function wake(){ document.body.classList.remove('idle'); clearTimeout(idleT);
-  idleT=setTimeout(()=>{ if(!$('#controls').matches(':hover')) document.body.classList.add('idle'); }, 2800); }
+  idleT=setTimeout(()=>{ if(!$('#controls').matches(':hover') && !document.body.classList.contains('prep-open') && !anyOverlay()) document.body.classList.add('idle'); }, 2800); }
 ['mousemove','mousedown','touchstart','keydown'].forEach(ev=>addEventListener(ev, wake, {passive:true}));
 wake();
 
 /* منع التمرير بالعجلة أو اللمس */
-addEventListener('wheel', e=>{ if(!e.target.closest('textarea,.code-out,#notes')) e.preventDefault(); }, {passive:false});
+addEventListener('wheel', e=>{ if(!e.target.closest('textarea,.code-out,#notes,#prep,.ov,#printDoc')) e.preventDefault(); }, {passive:false});
 
 /* تحميل الأصوات للنطق مبكرًا */
 if('speechSynthesis' in window) speechSynthesis.getVoices();
@@ -2071,7 +2285,120 @@ if('speechSynthesis' in window) speechSynthesis.getVoices();
   requestAnimationFrame(frame);
 })();
 
-Deck.build();
+/* ==========================================================================
+   📚 الربط بالمكتبة: تتبّع التقدم + التحضير + الخريطة + الطباعة + الاستكمال
+   ========================================================================== */
+const PREP_KEY='reema-prep', PROG_KEY='reema-progress';
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)||'{}')||{}; }catch(e){ return {}; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
+};
+const strip = s => String(s??'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+const SLIDE_NAMES = { title:'الترحيب: '+LESSON.title, closing:'الختام والواجب' };
+const nameOfSlide = s => SLIDE_NAMES[s.id] || strip(s.title||s.q||s.stage||'شريحة') || 'شريحة';
+const anyOverlay = () => $$('.ov.open').length>0;
+const PRINT = location.hash==='#print';
+
+/* 📍 تتبّع التقدم (لكل فصل) — يظهر في المكتبة */
+function progOf(){ const all=store.get(PROG_KEY); return ((all[LESSON_ID]||{})[LESSON.classId])||null; }
+function saveProgress(){
+  if(PRINT || Deck.cur<0) return;
+  const cur=Deck.cur, total=SLIDES.length;
+  const all=store.get(PROG_KEY), L=all[LESSON_ID]=all[LESSON_ID]||{};
+  const p=L[LESSON.classId]=L[LESSON.classId]||{visited:[]};
+  const id=SLIDES[cur].id;
+  if(!Array.isArray(p.visited)) p.visited=[];
+  if(!p.visited.includes(id)) p.visited.push(id);
+  p.visited=p.visited.filter(v=>SLIDES.some(s=>s.id===v));
+  p.slide=cur; p.slideId=id; p.max=Math.max(p.max||0,cur); p.total=total;
+  p.title=nameOfSlide(SLIDES[cur]); p.className=LESSON.className||'بدون فصل محدد';
+  p.updated=Date.now(); p.done=p.visited.length>=total || cur===total-1 || !!p.done;
+  store.set(PROG_KEY,all);
+}
+
+/* 📝 التحضير (يُحفظ لكل شريحة في هذا الدرس) */
+const PF=['min','goal','st','t','s','ev','note'];
+function defPrep(s){ const p=s.prep||{}; return { min:p.min??2, goal:p.goal||'', st:p.st||strip(s.strategy||''), t:p.t||'', s:p.s||'', ev:p.ev||'', note:'' }; }
+function prepOf(s){ const mine=((store.get(PREP_KEY)[LESSON_ID])||{})[s.id]; return Object.assign(defPrep(s), mine||{}); }
+function savePrepField(id,f,v){ const all=store.get(PREP_KEY), L=all[LESSON_ID]=all[LESSON_ID]||{}; const o=L[id]=L[id]||{}; o[f]=v; L._updated=Date.now(); return store.set(PREP_KEY,all); }
+function isCustom(id){ const o=((store.get(PREP_KEY)[LESSON_ID])||{})[id]; return !!(o&&Object.keys(o).length); }
+$('#prep [data-f="goal"]').innerHTML=Object.entries(GOALS).map(([k,v])=>`<option value="${k}">${esc(v)}</option>`).join('');
+function totalMin(){ return SLIDES.reduce((a,s)=>a+(+prepOf(s).min||0),0); }
+function fillPrep(){
+  if(Deck.cur<0) return;
+  const s=SLIDES[Deck.cur], p=prepOf(s);
+  $('#ppNum').textContent=`${Deck.cur+1} / ${SLIDES.length}`; $('#ppTitle').textContent=nameOfSlide(s);
+  $('#ppTip').innerHTML=s.notes?`💡 <b>تلميح العرض:</b> ${s.notes}`:'';
+  PF.forEach(f=>{ const el=$(`#prep [data-f="${f}"]`); if(el && document.activeElement!==el) el.value=p[f]??''; });
+  const pr=progOf(); const seen=pr&&pr.visited&&pr.visited.includes(s.id);
+  $('#ppDone').innerHTML=seen?`<b>✓</b> تم عرض هذه الشريحة${LESSON.className?' مع '+esc(LESSON.className):''}`:'⏳ لم تُعرض هذه الشريحة بعد';
+  $('#ppTotal').innerHTML=`⏱️ مجموع زمن الدرس حسب التحضير: <b>${totalMin()} دقيقة</b>${isCustom(s.id)?' · ✏️ معدّل':''}`;
+}
+let savedT;
+$$('#prep [data-f]').forEach(el=>el.addEventListener('input',()=>{
+  const ok=savePrepField(SLIDES[Deck.cur].id, el.dataset.f, el.dataset.f==='min'?(+el.value||0):el.value);
+  const m=$('#ppSaved'); m.textContent=ok?'✓ تم الحفظ':'⚠️ تعذّر الحفظ'; m.classList.add('on'); clearTimeout(savedT); savedT=setTimeout(()=>m.classList.remove('on'),1400);
+  if(el.dataset.f==='min') $('#ppTotal').innerHTML=`⏱️ مجموع زمن الدرس حسب التحضير: <b>${totalMin()} دقيقة</b> · ✏️ معدّل`;
+}));
+function togglePrep(force){
+  const on=force===undefined?!document.body.classList.contains('prep-open'):force;
+  document.body.classList.toggle('prep-open',on); $('#btnNotes').classList.toggle('on',on);
+  if(on) fillPrep(); fit(); wake();
+}
+$('#ppClose').onclick=()=>togglePrep(false);
+$('#ppPrev').onclick=()=>Deck.prev(); $('#ppNext').onclick=()=>Deck.next();
+$('#ppReset').onclick=()=>{ if(!confirm('إرجاع تحضير هذه الشريحة للنص الافتراضي؟')) return; const all=store.get(PREP_KEY); if(all[LESSON_ID]) delete all[LESSON_ID][SLIDES[Deck.cur].id]; store.set(PREP_KEY,all); fillPrep(); };
+$('#ppPrint').onclick=()=>{ saveProgress(); window.open(location.pathname+'#print','_blank'); };
+
+/* 🗂️ خريطة الشرائح (المعروض ✓ والحالية) */
+function openOverview(){
+  const pr=progOf()||{visited:[]}, seen=pr.visited||[];
+  const nSeen=SLIDES.filter(s=>seen.includes(s.id)).length;
+  $('#ovwStat').textContent=`${LESSON.className?LESSON.className+' · ':''}عُرضت ${nSeen} من ${SLIDES.length} شريحة`;
+  $('#ovwBar').style.width=(nSeen/SLIDES.length*100)+'%';
+  $('#ovwGrid').innerHTML=SLIDES.map((s,i)=>{ const p=prepOf(s);
+    return `<button class="ovw-it ${seen.includes(s.id)?'seen':''} ${i===Deck.cur?'cur':''}" data-i="${i}">${isCustom(s.id)?'<span class="pm" title="تحضير معدّل">📝</span>':''}<span class="ovn">${String(i+1).padStart(2,'0')} · ${p.min||0} د</span><span class="ovt">${esc(nameOfSlide(s))}</span><span class="ovg">${esc(strip(s.stage||''))}</span></button>`; }).join('');
+  $$('#ovwGrid .ovw-it').forEach(b=>b.onclick=()=>{ $('#ovw').classList.remove('open'); Deck.go(+b.dataset.i); });
+  $('#ovw').classList.add('open'); wake();
+}
+$$('[data-close]').forEach(b=>b.onclick=()=>$('#'+b.dataset.close).classList.remove('open'));
+$$('.ov').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o && o.id!=='resume') o.classList.remove('open'); }));
+
+/* 🖨️ طباعة التحضير (#print) */
+function renderPrint(){
+  const PR=LESSON.print||{};
+  document.body.classList.add('print-mode'); document.title='تحضير — '+LESSON.title;
+  const rows=SLIDES.map((s,i)=>{ const p=prepOf(s); return `<tr><td>${i+1}</td><td><b>${esc(nameOfSlide(s))}</b><small>${esc(strip(s.stage||''))}</small></td><td>${p.min||0} د</td><td>${esc(GOALS[p.goal]||'')}</td><td>${esc(p.st)}</td><td>${esc(p.t)}</td><td>${esc(p.s)}</td><td>${esc(p.ev)}</td><td>${esc(p.note)}</td></tr>`; }).join('');
+  $('#printDoc').innerHTML=`
+    <div class="pd-tools"><button onclick="print()">🖨️ طباعة / حفظ PDF</button><button class="l" onclick="location.hash='';location.reload()">↩ العودة للعرض</button></div>
+    <div class="pd-head"><div><div class="sub">${esc(LESSON.subject)} · ${esc(LESSON.grade||'')}</div><h1>تحضير ${esc(LESSON.lessonNo)}: ${esc(LESSON.title)}</h1></div><div class="sub">⏱️ الزمن الكلي: <b>${totalMin()} دقيقة</b></div></div>
+    <div class="pd-meta"><div><b>المعلمة</b>${esc(LESSON.teacher)}</div><div><b>المدرسة</b>${esc(LESSON.school||'…………………')}</div><div><b>الفصل</b>${esc(LESSON.className||'…………………')}</div><div><b>التاريخ</b>…… / …… / ………</div></div>
+    <div class="pd-goals"><h3>🎯 أهداف الدرس</h3><ol>${Object.keys(GOALS).filter(k=>k!=='g0'&&k!=='gz').map(k=>`<li>${esc(GOALS[k])}</li>`).join('')}</ol>
+      <div style="margin-top:6px"><b>المفاهيم الرئيسة:</b> ${PR.concepts||'—'} &nbsp;·&nbsp; <b>الوسائل:</b> ${PR.tools||'العرض التفاعلي، السبورة الذكية، الكتاب المدرسي'}</div></div>
+    <table><thead><tr><th>#</th><th style="width:15%">الشريحة</th><th>الزمن</th><th style="width:11%">الهدف</th><th style="width:10%">الاستراتيجية</th><th style="width:20%">إجراءات المعلمة</th><th style="width:14%">نشاط الطالبات</th><th style="width:12%">التقويم</th><th style="width:10%">ملاحظات</th></tr></thead><tbody>${rows}</tbody></table>
+    ${PR.homework?`<div class="pd-goals" style="margin-top:14px"><b>📚 الواجب:</b> ${PR.homework}</div>`:''}
+    <div class="pd-sign"><span>توقيع المعلمة: ………………………</span><span>توقيع المشرفة / القائدة: ………………………</span></div>`;
+}
+
+/* ▶️ البداية + الاستكمال من حيث توقفت المعلمة */
+if(PRINT){ renderPrint(); }
+else {
+  Deck.build();
+  const JUMP=(location.hash.match(/^#(?:s=)?(\d+)$/)||[])[1];
+  const pr=progOf();
+  if(JUMP){ Deck.go(Math.min(+JUMP-1,SLIDES.length-1)); }
+  else if(pr && pr.slide>0 && pr.slide<SLIDES.length){
+    const n=Math.min(pr.slide,SLIDES.length-1), seen=(pr.visited||[]).length;
+    const d=pr.updated?new Date(pr.updated).toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long'}):'';
+    $('#rsT').textContent=`أهلًا ${LESSON.teacher||''}!`;
+    $('#rsP').innerHTML=`آخر مرة${LESSON.className?' مع <b>'+esc(LESSON.className)+'</b>':''} وصلتِ إلى الشريحة <b>${n+1}</b>: «${esc(nameOfSlide(SLIDES[n]))}»${d?'<br>'+d:''} · عُرضت ${seen} من ${SLIDES.length} شريحة`;
+    $('#rsBar').style.width=(Math.min(seen,SLIDES.length)/SLIDES.length*100)+'%';
+    $('#rsGo').textContent=`▶ أكملي من الشريحة ${n+1}`;
+    $('#rsGo').onclick=()=>{ $('#resume').classList.remove('open'); Deck.go(n); };
+    $('#rsNew').onclick=()=>{ $('#resume').classList.remove('open'); Deck.go(0); saveProgress(); };
+    Deck.go(0,true); $('#resume').classList.add('open');
+  } else { Deck.go(0,true); saveProgress(); }
+}
 </script>
 </body>
 </html>
